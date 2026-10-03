@@ -1,0 +1,107 @@
+# Experiment registry — perception-imagery-latent-ablation (Option 3 dual-track)
+# Template initialized at execute-experiment kickoff (2026-09-10).
+# Update fields as milestones complete; do not delete historical entries.
+
+study:
+  slug: perception-imagery-latent-ablation
+  model_design: option-3-dual-track
+  execution_plan: docs/workflow_stages/execution_plans/2026-09-10-perception-imagery-latent-ablation-execution-plan.md
+  plan_approved_at: "2026-09-10"
+  manifest_version: null  # set at M0 (e.g. "1.0.0")
+
+provenance:
+  git_commit: c9e89c2b65553c77c5f89330a84e664a04be8c1a
+  mirage_fork_commit: null
+  mirage_notebook_commit: null
+  manifest_sha256: null
+  audit_sha256: null
+  manifest_frozen_at: null
+
+csf:
+  platform: csf3
+  username: z29707aj
+  login_verified_at: "2026-10-02"
+  home_project_dir: "~/comp30030-mirage-ablation"
+  scratch_root: "~/scratch/comp30030-mirage-ablation"
+  slurm_tutorial_complete: false
+  max_gpus_concurrent: 4
+  notes: "See docs/CSF/ and execution plan CSF3 operational workflow"
+
+data_access:
+  nsd_form_submitted: false
+  nsd_form_approved: false
+  nsd_imagery_access_confirmed: false
+  nsd_sync_completed_at: null
+  nsd_imagery_sync_completed_at: null
+  mirage_hf_selective_sync_completed_at: null
+  notes: "NSD pending; CSF ready — sync to scratch from login node"
+
+tracks:
+  A:
+    scope: "S12 reproduction gate only — combined, Setting A, subjects {1,2,5,7}"
+    status: not_started
+    authoritative_for: S12_reconstruction_metrics
+    artifact_root: artifacts/reproduction_gate/mirage_notebook/
+  B:
+    scope: "S0-S11 modular ablation engine"
+    status: not_started
+    authoritative_for: [S8_decoder_metrics, S10_reconstruction, S11_statistics]
+    artifact_root: artifacts/
+    package_status: deferred  # mirage_ablation not implemented until data access confirmed
+
+milestones:
+  M0_manifest_frozen:
+    status: blocked
+    blocker: data_access_pending
+  M1_data_ready:
+    status: blocked
+    blocker: data_access_pending
+  M2_track_a_gate_pass:
+    status: blocked
+    blocker: [data_access_pending, M1_data_ready]
+  M3_track_b_ridges_fit:
+    status: not_started
+  M4_latent_cache_complete:
+    status: not_started
+  M5_decoder_metrics:
+    status: blocked
+    blocker: M2_track_a_gate_pass
+  M6_reconstructions:
+    status: not_started
+  M7_parity_confirmed:
+    status: not_started
+  M8_primary_inference:
+    status: not_started
+  M9_secondary_inference:
+    status: not_started
+  M10_repro_bundle:
+    status: not_started
+
+human_gates:
+  HG-0_manifest_freeze:
+    status: pending
+    signed_at: null
+    signed_by: null
+  HG-1_leakage_checklist:
+    status: pending
+  HG-2_track_a_s12_gate:
+    status: pending
+  HG-3_parity_audit:
+    status: pending
+  HG-4_setting_b_branch:
+    status: pending
+  HG-5_manuscript_stats:
+    status: pending
+
+environment_pins:
+  track_a_python: null
+  track_b_python: null
+  pytorch_cuda: null
+  glmsingle_version: null
+  clip_checkpoints: []
+  stable_cascade_hashes: []
+  vdvae_hash: null
+  diffusion_seeds: [42, 123, 456]
+  reconstructions_per_seed: 10
+
+runs: []  # append run_id entries as jobs execute; full records in runs/{run_id}/run.json

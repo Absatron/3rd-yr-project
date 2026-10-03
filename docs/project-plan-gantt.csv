@@ -1,0 +1,21 @@
+Task_ID,Work_Package,Task_Name,Milestone,Location,Start_Date,End_Date,Weeks,Depends_On,Focus,Status,Exit_Criteria
+T01,Planning,Project plan and supervisor alignment,M-plan,Laptop,2026-09-21,2026-10-05,2,,Primary,In progress,Plan reviewed with supervisor
+T02,Planning,CSF3 account and Slurm onboarding,M-infra,CSF + Laptop,2026-10-01,2026-10-12,2,T01,Primary,In progress,Login verified; first sbatch job completes
+T03,Planning,NSD data access and Tier 1 metadata sync,M0,Laptop + CSF login,2026-10-06,2026-10-19,2,T02,Primary,Planned,NSD DUA approved; manifests inputs on disk
+T04,Design,Experimental design and execution plan (frozen),M-design,Laptop,2026-09-06,2026-09-10,1,,Primary,Done,Execution plan approved Option 3
+T05,Development,Code scaffold mirage_ablation and CSF jobscripts,M0,Laptop + CSF home,2026-10-06,2026-10-26,3,T02,Primary,Planned,Preflight passes; jobscript template in repo
+T06,Data,M0 manifest freeze S0,HG-0,CSF scratch,2026-10-20,2026-11-02,2,T03;T05,Primary,Planned,Manifests hashed; HG-0 signed
+T07,Data,M1 ingest and splits S1-S4,M1,CSF batch,2026-11-03,2026-11-16,2,T06,Primary,Planned,Leakage checklist 12/12; HG-1
+T08,Data,Tier 2-3 NSD sync to scratch,M1,CSF login,2026-10-20,2026-11-09,3,T02,Secondary,Planned,Imagery + perception betas on scratch
+T09,Compute,M2 Track A reproduction gate,M2,CSF GPU+high-mem,2026-11-17,2026-12-07,3,T07,Primary,Planned,gate_report.json pass; HG-2
+T10,Compute,M3-M4 ridge lambda and latent cache,M3-M4,CSF batch,2026-11-24,2026-12-21,4,T07,Primary,Planned,216 latent cells cached
+T11,Compute,M5 decoder metrics S8,M5,CSF CPU/GPU,2026-12-08,2026-12-28,3,T09;T10,Primary,Planned,D_s_i_c tables (report after M2)
+T12,Compute,M6 diffusion and recon S9-S10,M6,CSF GPU,2026-12-15,2027-01-18,5,T10,Primary,Planned,R_s_i_c tables; steady GPU submits
+T13,Compute,M7 parity Track A vs B combined,M7,CSF CPU,2027-01-05,2027-01-12,1,T09;T12,Primary,Planned,parity_report.json; HG-3
+T14,Analysis,M8 primary statistics S11 Setting A,M8,CSF CPU,2027-01-13,2027-01-25,2,T11;T12;T13,Primary,Planned,Omnibus and Holm tables
+T15,Analysis,M9 secondary Setting B optional,M9,CSF CPU,2027-01-26,2027-02-08,2,T14,Secondary,Planned,Secondary report labelled
+T16,Writing,Dissertation Methods and background,M-write,Laptop,2026-10-06,2026-12-31,12,T04,Secondary,Planned,Methods draft from protocol
+T17,Writing,Results and Discussion drafts,M-write,Laptop,2027-01-01,2027-02-01,4,T14,Primary,Planned,Results tied to M8 outputs
+T18,Writing,Full dissertation draft,S2-W1,Laptop,2027-01-26,2027-02-02,1,T17,Primary,Planned,Complete draft PDF
+T19,Submission,Code freeze and implementation stop,S2-W8,Git + CSF,2027-03-16,2027-03-27,2,T14,Primary,Planned,Repo frozen per handbook
+T20,Submission,Final report and screencast,S2-W10,Laptop,2027-04-06,2027-04-27,3,T18;T19,Primary,Planned,Submitted by deadline
