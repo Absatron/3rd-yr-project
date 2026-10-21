@@ -39,6 +39,9 @@ python scripts/s0_populate_manifests.py \
   --audit --threshold 0.85 \
   --output manifests/stimulus_overlap_audit.json
 
+# S0.2b — MIRAGE load_nsd cross-check (also embedded in audit JSON by --audit)
+python scripts/compare_mirage_training_split.py --write-audit
+
 # S0.3 — distractor catalogues
 python scripts/s0_populate_manifests.py --freeze-catalogues
 
@@ -57,7 +60,7 @@ python scripts/preflight.py
 ## Freeze protocol (HG-0)
 
 1. Review manifest JSON contents for correctness (18 stimuli; 6 per type; subject lists).
-2. Review overlap audit: expect `exact_seen` count $= 0$ for complex stimuli under Setting A.
+2. Review overlap audit: read `exact_seen` per subject and confirm `mirage_split_verification.all_subjects_agree` is `true` (re-run `python scripts/compare_mirage_training_split.py --write-audit` if missing). Non-zero `exact_seen` on some subjects is **compatible with MIRAGE** when the imagery scene’s `nsd_id` is on a CSV row with `shared1000=False` — the manifest `overlap_label: shared1000` names the imagery benchmark pool, not the `nsd_stim_info_merged.csv` column. Setting A for S12 matches [MIRAGE `load_nsd`](https://github.com/MedARC-AI/MIRAGE/blob/main/src/utils.py); use **Setting B** to drop `exact_seen` targets for strict holdout ablations.
 3. Run `python scripts/preflight.py --leakage-checklist` (target: 12/12 pass after S4).
 4. Record `manifest_sha256` and `audit_sha256` in `runs/registry.yaml`.
 5. **Investigator sign-off** in `runs/execution_log.md` with date and statement: *"HG-0: manifests reviewed and frozen."*

@@ -162,6 +162,8 @@ Inspect repo file trees on Hugging Face before syncing; pin exact filenames in `
 
 **Estimated download (M0):** $<$5 GB if manifests and audit encoders only.
 
+**Overlap audit vs MIRAGE (HG-0):** Setting A uses the same training mask as [MIRAGE `load_nsd`](https://github.com/MedARC-AI/MIRAGE/blob/main/src/utils.py) (`shared1000=False` rows in `nsd_stim_info_merged.csv`). Non-zero `exact_seen` on some subjects can match that mask; confirm with `python scripts/compare_mirage_training_split.py --write-audit` (`mirage_split_verification.all_subjects_agree`). Strict holdout for ablations is **Setting B**, not a change to the S12 reproduction split.
+
 **Blocks:** HG-0 (manifest freeze) → unblocks S1 and Track A environment setup.
 
 ### M1 — Data ready (S1–S4)

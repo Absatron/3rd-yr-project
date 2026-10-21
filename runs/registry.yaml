@@ -14,7 +14,7 @@ provenance:
   mirage_fork_commit: null
   mirage_notebook_commit: null
   manifest_sha256: 4c6f3f8ea8db94aaa636248117a7ca41545e9be46bb3bc5acd4e1c790a69cfa8
-  audit_sha256: f67fc4417a4aab7691d14fbc1c24653ddaa1ff99b38393146d3b468288e470ea
+  audit_sha256: 890c94bfb3f7cdb4e7a603594365e8b65db459d54325ec6ee2c59a14223b1fc8
   manifest_frozen_at: null  # HG-0 pending investigator sign-off
 
 csf:

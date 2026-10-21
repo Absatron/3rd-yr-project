@@ -2,52 +2,14 @@
 
 from __future__ import annotations
 
-import csv
 import json
 from pathlib import Path
 from typing import Any
 
 from mirage_ablation.config.paths import frozen_weights_dir, raw_nsd_dir
 from mirage_ablation.config.schema import NsdImageryTestManifest
-
-TEST_SUBJECTS = [1, 2, 5, 7]
-
-
-def _shared1000_coco_ids(stim_csv: Path) -> set[int]:
-    ids: set[int] = set()
-    with stim_csv.open(newline="") as f:
-        for row in csv.DictReader(f):
-            if row.get("shared1000", "").lower() != "true":
-                continue
-            coco = row.get("cocoId")
-            if coco and coco.isdigit():
-                ids.add(int(coco))
-    return ids
-
-
-def _training_coco_ids_for_subject(
-    stim_csv: Path, subject: int, *, setting_a: bool = True
-) -> set[int]:
-    """Perception training COCO IDs for overlap audit (Setting A excludes shared1000)."""
-    col = f"subject{subject}"
-    shared1000 = _shared1000_coco_ids(stim_csv) if setting_a else set()
-    ids: set[int] = set()
-    with stim_csv.open(newline="") as f:
-        for row in csv.DictReader(f):
-            try:
-                shown = int(row.get(col, "0") or "0")
-            except ValueError:
-                shown = 0
-            if shown <= 0:
-                continue
-            coco = row.get("cocoId")
-            if not coco or not coco.isdigit():
-                continue
-            cid = int(coco)
-            if setting_a and cid in shared1000:
-                continue
-            ids.add(cid)
-    return ids
+from mirage_ablation.s0.mirage_split import build_mirage_split_verification
+from mirage_ablation.s0.training_mask import TEST_SUBJECTS, training_coco_ids_for_subject
 
 
 def _clip_weights_present() -> bool:
@@ -67,7 +29,7 @@ def build_overlap_audit(
 
     per_subject: dict[str, Any] = {}
     for subj in TEST_SUBJECTS:
-        train_cocos = _training_coco_ids_for_subject(stim_csv, subj)
+        train_cocos = training_coco_ids_for_subject(stim_csv, subj)
         exact_seen: list[dict[str, Any]] = []
         for stim in manifest.imagery_stimuli:
             if stim.type != "complex" or stim.coco_id is None:
@@ -89,6 +51,7 @@ def build_overlap_audit(
         }
 
     clip_ready = _clip_weights_present()
+    mirage_verification = build_mirage_split_verification(manifest, stim_csv)
     return {
         "version": manifest.version,
         "created": manifest.created,
@@ -100,6 +63,7 @@ def build_overlap_audit(
             if not clip_ready
             else None
         ),
+        "mirage_split_verification": mirage_verification,
         "per_subject": per_subject,
     }
 

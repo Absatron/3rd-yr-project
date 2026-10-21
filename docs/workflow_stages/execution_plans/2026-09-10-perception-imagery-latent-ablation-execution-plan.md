@@ -338,7 +338,7 @@ S0 is **shared** and must complete before Track A training or any Track B S5 job
 | **CLI**        | `python scripts/s0_populate_manifests.py --audit --threshold 0.85 --output manifests/stimulus_overlap_audit.json`                                                      |
 | **Inputs**     | NSD training manifests (sessions 1–40, subjects 1,2,5,7); CLIP ViT-L/14 CLS embeddings                                                                                 |
 | **Actions**    | Per subject: exact COCO ID matches; semantic neighbours ($\geq 0.85$); Setting B exclusion lists; conceptual lemma caption holdout (substring match on LLaVA captions) |
-| **Acceptance** | Per-subject lists populated; `exact_seen` count verified (expect 0 for complex under Setting A); audit references manifest stimulus IDs                                |
+| **Acceptance** | Per-subject lists populated; `mirage_split_verification.all_subjects_agree` true (`scripts/compare_mirage_training_split.py`); audit references manifest stimulus IDs |
 
 ### Task S0.3 — Distractor catalogues freeze
 

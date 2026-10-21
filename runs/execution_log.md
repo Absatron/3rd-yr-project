@@ -81,7 +81,7 @@ sbatch ~/comp30030-mirage-ablation/scripts/csf/hf_selective_download.sbatch
 
 **Artifacts:** Manifests committed on `main` (`manifests/nsd_imagery_test_manifest_v1.json`, `stimulus_overlap_audit.json`, `.sha256` sidecars). Registry updated: `csf.slurm_tutorial_complete: true`, manifest SHA256 recorded; `manifest_frozen_at` still null.
 
-**Human gates:** HG-0 **not signed** — investigator must review overlap audit (`exact_seen_count` 0 for subj1; 1–2 for subj 2/5/7) before training.
+**Human gates:** HG-0 **not signed** — review manifests and overlap audit; confirm `mirage_split_verification` via `python scripts/compare_mirage_training_split.py --write-audit` (non-zero `exact_seen` on subj 2/5/7 aligns with MIRAGE `load_nsd`, not a reproduction blocker).
 
 **M1 plan:** When M0 log shows completion, run `sbatch --export=SUBJ=NN scripts/csf/sync_m1_perception_subj.sbatch` for `NN=01..08` (one subject at a time).
 

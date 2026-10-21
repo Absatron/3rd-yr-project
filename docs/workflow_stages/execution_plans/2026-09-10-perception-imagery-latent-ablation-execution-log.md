@@ -38,7 +38,7 @@ Kickoff (2026-09-10) created docs and registry. **2026-10-03–05:** CSF home/sc
 | ~~B4~~ | ~~`mirage_ablation/` + `scripts/s0_*`~~ | — | **Resolved 2026-10-21** — S0 scaffold committed |
 | ~~B5~~ | ~~CSF access~~ | — | **Resolved 2026-10-02** |
 | ~~B6~~ | ~~CSF repo/scratch layout~~ | — | **Resolved 2026-10-03** |
-| **B7** | HG-0 investigator sign-off pending | Training blocked | Review manifests + overlap audit (`exact_seen` on subj 2/5/7 — verify) |
+| **B7** | HG-0 investigator sign-off pending | Training blocked | Review manifests + overlap audit; run `compare_mirage_training_split.py --write-audit` |
 | **B8** | `track_a/` + MIRAGE fork not vendored | Track A gate | Deferred post-M1 |
 | ~~B9~~ | ~~Slurm smoke not recorded~~ | — | **Resolved 2026-10-21** — job `23495544` |
 | **B10** | M0 scratch sync in progress | M1 imagery ingest | Monitor `runs/m0_sync_2026-10-21.log` on CSF |
@@ -113,7 +113,7 @@ Kickoff (2026-09-10) created docs and registry. **2026-10-03–05:** CSF home/sc
 | M0 `DRYRUN=1 sync_m0_metadata.sh` on CSF | **PASS** |
 | M0 real sync (background) | **IN PROGRESS** — log `~/scratch/.../runs/m0_sync_2026-10-21.log` |
 | S0 manifest population (official `cue_pair_list.xlsx`) | **PASS** — 18 stimuli; hashes in repo |
-| Overlap audit (Setting A exact COCO) | **PARTIAL** — subj1 `exact_seen=0`; subj 2/5/7 >0 — **investigator review** |
+| Overlap audit (Setting A exact COCO) | **PASS** vs MIRAGE mask — subj 2/5/7 `exact_seen` matches `load_nsd`; doc + `compare_mirage_training_split.py` |
 | Selective HF download | **SUBMITTED** — Slurm `23495715` |
 | HG-0 sign-off | **NOT DONE** (by design) |
 

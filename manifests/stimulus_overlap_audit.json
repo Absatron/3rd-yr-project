@@ -4,6 +4,250 @@
   "semantic_threshold": 0.85,
   "clip_audit_status": "pending_weights",
   "notes": "Semantic-neighbour and conceptual lemma holdout require CLIP ViT-L/14 and LLaVA caption files on disk; re-run after selective HF sync.",
+  "mirage_split_verification": {
+    "mirage_reference": "https://github.com/MedARC-AI/MIRAGE/blob/main/src/utils.py (function load_nsd: subject saw image and stim_descriptions['shared1000'] == False)",
+    "stim_csv": "raw/nsd/experiments/nsd/nsd_stim_info_merged.csv",
+    "notes": "Setting A excludes rows with shared1000=True in nsd_stim_info_merged.csv (1000 images), matching MIRAGE load_nsd. NSD-Imagery complex scenes labelled shared1000 in the test manifest may still have shared1000=False in that CSV; exact_seen>0 can match MIRAGE and is not a reproduction blocker. Use Setting B to remove exact_seen targets for strict holdout.",
+    "all_subjects_agree": true,
+    "per_subject": {
+      "1": {
+        "comparisons": [
+          {
+            "stimulus_id": "complex_nsd00000",
+            "nsd_id": 0,
+            "coco_id": 532481,
+            "overlap_label": "artwork",
+            "audit_exact_seen": false,
+            "mirage_nsd_in_train": false,
+            "agreement": true
+          },
+          {
+            "stimulus_id": "complex_nsd28752",
+            "nsd_id": 28752,
+            "coco_id": 83614,
+            "overlap_label": "shared1000",
+            "audit_exact_seen": false,
+            "mirage_nsd_in_train": false,
+            "agreement": true
+          },
+          {
+            "stimulus_id": "complex_nsd30857",
+            "nsd_id": 30857,
+            "coco_id": 353830,
+            "overlap_label": "shared1000",
+            "audit_exact_seen": false,
+            "mirage_nsd_in_train": false,
+            "agreement": true
+          },
+          {
+            "stimulus_id": "complex_nsd53882",
+            "nsd_id": 53882,
+            "coco_id": 181799,
+            "overlap_label": "shared1000",
+            "audit_exact_seen": false,
+            "mirage_nsd_in_train": false,
+            "agreement": true
+          },
+          {
+            "stimulus_id": "complex_nsd61178",
+            "nsd_id": 61178,
+            "coco_id": 209923,
+            "overlap_label": "shared1000",
+            "audit_exact_seen": false,
+            "mirage_nsd_in_train": false,
+            "agreement": true
+          },
+          {
+            "stimulus_id": "complex_nsd65873",
+            "nsd_id": 65873,
+            "coco_id": 490280,
+            "overlap_label": "shared1000",
+            "audit_exact_seen": false,
+            "mirage_nsd_in_train": false,
+            "agreement": true
+          }
+        ],
+        "all_agreements": true
+      },
+      "2": {
+        "comparisons": [
+          {
+            "stimulus_id": "complex_nsd00000",
+            "nsd_id": 0,
+            "coco_id": 532481,
+            "overlap_label": "artwork",
+            "audit_exact_seen": false,
+            "mirage_nsd_in_train": false,
+            "agreement": true
+          },
+          {
+            "stimulus_id": "complex_nsd28752",
+            "nsd_id": 28752,
+            "coco_id": 83614,
+            "overlap_label": "shared1000",
+            "audit_exact_seen": false,
+            "mirage_nsd_in_train": false,
+            "agreement": true
+          },
+          {
+            "stimulus_id": "complex_nsd30857",
+            "nsd_id": 30857,
+            "coco_id": 353830,
+            "overlap_label": "shared1000",
+            "audit_exact_seen": true,
+            "mirage_nsd_in_train": true,
+            "agreement": true
+          },
+          {
+            "stimulus_id": "complex_nsd53882",
+            "nsd_id": 53882,
+            "coco_id": 181799,
+            "overlap_label": "shared1000",
+            "audit_exact_seen": false,
+            "mirage_nsd_in_train": false,
+            "agreement": true
+          },
+          {
+            "stimulus_id": "complex_nsd61178",
+            "nsd_id": 61178,
+            "coco_id": 209923,
+            "overlap_label": "shared1000",
+            "audit_exact_seen": true,
+            "mirage_nsd_in_train": true,
+            "agreement": true
+          },
+          {
+            "stimulus_id": "complex_nsd65873",
+            "nsd_id": 65873,
+            "coco_id": 490280,
+            "overlap_label": "shared1000",
+            "audit_exact_seen": false,
+            "mirage_nsd_in_train": false,
+            "agreement": true
+          }
+        ],
+        "all_agreements": true
+      },
+      "5": {
+        "comparisons": [
+          {
+            "stimulus_id": "complex_nsd00000",
+            "nsd_id": 0,
+            "coco_id": 532481,
+            "overlap_label": "artwork",
+            "audit_exact_seen": false,
+            "mirage_nsd_in_train": false,
+            "agreement": true
+          },
+          {
+            "stimulus_id": "complex_nsd28752",
+            "nsd_id": 28752,
+            "coco_id": 83614,
+            "overlap_label": "shared1000",
+            "audit_exact_seen": false,
+            "mirage_nsd_in_train": false,
+            "agreement": true
+          },
+          {
+            "stimulus_id": "complex_nsd30857",
+            "nsd_id": 30857,
+            "coco_id": 353830,
+            "overlap_label": "shared1000",
+            "audit_exact_seen": false,
+            "mirage_nsd_in_train": false,
+            "agreement": true
+          },
+          {
+            "stimulus_id": "complex_nsd53882",
+            "nsd_id": 53882,
+            "coco_id": 181799,
+            "overlap_label": "shared1000",
+            "audit_exact_seen": false,
+            "mirage_nsd_in_train": false,
+            "agreement": true
+          },
+          {
+            "stimulus_id": "complex_nsd61178",
+            "nsd_id": 61178,
+            "coco_id": 209923,
+            "overlap_label": "shared1000",
+            "audit_exact_seen": false,
+            "mirage_nsd_in_train": false,
+            "agreement": true
+          },
+          {
+            "stimulus_id": "complex_nsd65873",
+            "nsd_id": 65873,
+            "coco_id": 490280,
+            "overlap_label": "shared1000",
+            "audit_exact_seen": true,
+            "mirage_nsd_in_train": true,
+            "agreement": true
+          }
+        ],
+        "all_agreements": true
+      },
+      "7": {
+        "comparisons": [
+          {
+            "stimulus_id": "complex_nsd00000",
+            "nsd_id": 0,
+            "coco_id": 532481,
+            "overlap_label": "artwork",
+            "audit_exact_seen": false,
+            "mirage_nsd_in_train": false,
+            "agreement": true
+          },
+          {
+            "stimulus_id": "complex_nsd28752",
+            "nsd_id": 28752,
+            "coco_id": 83614,
+            "overlap_label": "shared1000",
+            "audit_exact_seen": false,
+            "mirage_nsd_in_train": false,
+            "agreement": true
+          },
+          {
+            "stimulus_id": "complex_nsd30857",
+            "nsd_id": 30857,
+            "coco_id": 353830,
+            "overlap_label": "shared1000",
+            "audit_exact_seen": false,
+            "mirage_nsd_in_train": false,
+            "agreement": true
+          },
+          {
+            "stimulus_id": "complex_nsd53882",
+            "nsd_id": 53882,
+            "coco_id": 181799,
+            "overlap_label": "shared1000",
+            "audit_exact_seen": true,
+            "mirage_nsd_in_train": true,
+            "agreement": true
+          },
+          {
+            "stimulus_id": "complex_nsd61178",
+            "nsd_id": 61178,
+            "coco_id": 209923,
+            "overlap_label": "shared1000",
+            "audit_exact_seen": false,
+            "mirage_nsd_in_train": false,
+            "agreement": true
+          },
+          {
+            "stimulus_id": "complex_nsd65873",
+            "nsd_id": 65873,
+            "coco_id": 490280,
+            "overlap_label": "shared1000",
+            "audit_exact_seen": false,
+            "mirage_nsd_in_train": false,
+            "agreement": true
+          }
+        ],
+        "all_agreements": true
+      }
+    }
+  },
   "per_subject": {
     "1": {
       "exact_seen": [],

@@ -56,7 +56,7 @@ Individual metrics are reported as **secondary confirmatory** endpoints for Opti
 
 | Stage | Data                       | Rule                                                                                       |
 | ----- | -------------------------- | ------------------------------------------------------------------------------------------ |
-| Train | NSD perception trials      | All perception trials for subject _s_ ∈ {1,2,5,7}, **excluding shared1000 COCO image IDs** |
+| Train | NSD perception trials      | All perception trials for subject _s_ ∈ {1,2,5,7}, **excluding rows with `shared1000=True` in `nsd_stim_info_merged.csv`** (same rule as MIRAGE `load_nsd`) |
 | Test  | NSD-Imagery imagery trials | All 18 imagery stimuli for the same subject _s_                                            |
 | Tune  | NSD perception trials      | Subjects 3,4,6,8, same exclusion rule                                                      |
 
@@ -70,7 +70,7 @@ Individual metrics are reported as **secondary confirmatory** endpoints for Opti
    - **Simple (6):** synthetic shape ID (not in COCO).
    - **Complex (6):** COCO/`shared1000` image ID for the 5 natural scenes + artwork ID for Kehinde Wiley _The Two Sisters_.
    - **Conceptual (6):** concept label string (no image ID).
-2. For each subject _s_ ∈ {1,2,5,7}, query NSD training manifests (sessions 1–40, excluding shared1000) for **exact image ID matches**.
+2. For each subject _s_ ∈ {1,2,5,7}, query NSD training manifests (sessions 1–40, excluding `shared1000=True` rows) for **exact COCO ID matches** on complex targets; cross-check with `scripts/compare_mirage_training_split.py` against MIRAGE `load_nsd`.
 3. Compute **semantic-neighbour overlap:** for each complex imagery target embedding (CLIP ViT-L/14 CLS), flag training images with cosine similarity ≥ **0.85** [unverified threshold — standard CLIP neighbourhood criterion; sensitivity analysis at 0.80 and 0.90 required in report].
 4. Write results to frozen manifest `manifests/stimulus_overlap_audit.json` (see Frozen test manifest spec).
 
@@ -78,7 +78,7 @@ Individual metrics are reported as **secondary confirmatory** endpoints for Opti
 
 | Label                  | Rule                                                             | Expected count (approx.)                                                                                              |
 | ---------------------- | ---------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
-| **Exact-seen**         | Exact COCO image ID present in subject's NSD perception training | **0** for standard split (complex scenes drawn from shared1000, which is excluded from training) — verify empirically |
+| **Exact-seen**         | Exact COCO image ID present in subject's Setting A perception training set | **Audit-dependent** — may be **> 0** for complex scenes whose `nsd_id` rows have `shared1000=False` in the CSV (imagery “shared1000 pool” naming ≠ that column). Non-zero counts that **agree with MIRAGE `load_nsd`** are expected for S12 reproduction; **Setting B** removes exact targets for strict holdout |
 | **Semantic-neighbour** | No exact match but ≥1 training image with CLIP CLS cosine ≥ 0.85 | Audit-dependent                                                                                                       |
 | **Strict-held-out**    | Neither exact nor semantic-neighbour                             | Remaining stimuli                                                                                                     |
 | **Non-image**          | Simple + conceptual (no single GT image)                         | 12 stimuli                                                                                                            |
