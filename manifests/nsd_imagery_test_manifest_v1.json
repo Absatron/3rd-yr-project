@@ -1,0 +1,235 @@
+{
+  "version": "1.0.0",
+  "created": "2026-10-21T15:03:13+00:00",
+  "hash_algorithm": "sha256",
+  "source_files": [
+    "raw/nsd_imagery/experiments/nsdimagery/cue_pair_list.xlsx",
+    "raw/nsd/experiments/nsd/nsd_stim_info_merged.csv"
+  ],
+  "subjects": [
+    1,
+    2,
+    5,
+    7
+  ],
+  "tuning_subjects": [
+    3,
+    4,
+    6,
+    8
+  ],
+  "imagery_stimuli": [
+    {
+      "stimulus_id": "complex_nsd00000",
+      "type": "complex",
+      "letter_cue": "T",
+      "coco_id": 532481,
+      "nsd_id": 0,
+      "target_label": "shared0000_nsd00000.png",
+      "overlap_label": "artwork",
+      "strict_holdout": true
+    },
+    {
+      "stimulus_id": "complex_nsd28752",
+      "type": "complex",
+      "letter_cue": "W",
+      "coco_id": 83614,
+      "nsd_id": 28752,
+      "target_label": "shared0385_nsd28752.png",
+      "overlap_label": "shared1000",
+      "strict_holdout": true
+    },
+    {
+      "stimulus_id": "complex_nsd30857",
+      "type": "complex",
+      "letter_cue": "K",
+      "coco_id": 353830,
+      "nsd_id": 30857,
+      "target_label": "shared0413_nsd30857.png",
+      "overlap_label": "shared1000",
+      "strict_holdout": true
+    },
+    {
+      "stimulus_id": "complex_nsd53882",
+      "type": "complex",
+      "letter_cue": "B",
+      "coco_id": 181799,
+      "nsd_id": 53882,
+      "target_label": "shared0741_nsd53882.png",
+      "overlap_label": "shared1000",
+      "strict_holdout": true
+    },
+    {
+      "stimulus_id": "complex_nsd61178",
+      "type": "complex",
+      "letter_cue": "C",
+      "coco_id": 209923,
+      "nsd_id": 61178,
+      "target_label": "shared0842_nsd61178.png",
+      "overlap_label": "shared1000",
+      "strict_holdout": true
+    },
+    {
+      "stimulus_id": "complex_nsd65873",
+      "type": "complex",
+      "letter_cue": "D",
+      "coco_id": 490280,
+      "nsd_id": 65873,
+      "target_label": "shared0907_nsd65873.png",
+      "overlap_label": "shared1000",
+      "strict_holdout": true
+    },
+    {
+      "stimulus_id": "conceptual_banana",
+      "type": "conceptual",
+      "letter_cue": "N",
+      "coco_id": null,
+      "nsd_id": null,
+      "target_label": "banana",
+      "overlap_label": "non-image",
+      "strict_holdout": true
+    },
+    {
+      "stimulus_id": "conceptual_fruit",
+      "type": "conceptual",
+      "letter_cue": "F",
+      "coco_id": null,
+      "nsd_id": null,
+      "target_label": "fruit",
+      "overlap_label": "non-image",
+      "strict_holdout": true
+    },
+    {
+      "stimulus_id": "conceptual_mammal",
+      "type": "conceptual",
+      "letter_cue": "M",
+      "coco_id": null,
+      "nsd_id": null,
+      "target_label": "mammal",
+      "overlap_label": "non-image",
+      "strict_holdout": true
+    },
+    {
+      "stimulus_id": "conceptual_stripes",
+      "type": "conceptual",
+      "letter_cue": "S",
+      "coco_id": null,
+      "nsd_id": null,
+      "target_label": "stripes",
+      "overlap_label": "non-image",
+      "strict_holdout": true
+    },
+    {
+      "stimulus_id": "conceptual_yellow",
+      "type": "conceptual",
+      "letter_cue": "Y",
+      "coco_id": null,
+      "nsd_id": null,
+      "target_label": "yellow",
+      "overlap_label": "non-image",
+      "strict_holdout": true
+    },
+    {
+      "stimulus_id": "conceptual_zebra",
+      "type": "conceptual",
+      "letter_cue": "Z",
+      "coco_id": null,
+      "nsd_id": null,
+      "target_label": "zebra",
+      "overlap_label": "non-image",
+      "strict_holdout": true
+    },
+    {
+      "stimulus_id": "simple_bar_000deg",
+      "type": "simple",
+      "letter_cue": "H",
+      "coco_id": null,
+      "nsd_id": null,
+      "target_label": "bar_000.0deg_450L_43W.png",
+      "overlap_label": "non-image",
+      "strict_holdout": true
+    },
+    {
+      "stimulus_id": "simple_bar_045deg",
+      "type": "simple",
+      "letter_cue": "R",
+      "coco_id": null,
+      "nsd_id": null,
+      "target_label": "bar_045.0deg_450L_43W.png",
+      "overlap_label": "non-image",
+      "strict_holdout": true
+    },
+    {
+      "stimulus_id": "simple_bar_090deg",
+      "type": "simple",
+      "letter_cue": "V",
+      "coco_id": null,
+      "nsd_id": null,
+      "target_label": "bar_090.0deg_450L_43W.png",
+      "overlap_label": "non-image",
+      "strict_holdout": true
+    },
+    {
+      "stimulus_id": "simple_bar_135deg",
+      "type": "simple",
+      "letter_cue": "L",
+      "coco_id": null,
+      "nsd_id": null,
+      "target_label": "bar_135.0deg_450L_43W.png",
+      "overlap_label": "non-image",
+      "strict_holdout": true
+    },
+    {
+      "stimulus_id": "simple_cross_000deg",
+      "type": "simple",
+      "letter_cue": "P",
+      "coco_id": null,
+      "nsd_id": null,
+      "target_label": "crs_000.0deg_450L_43W.png",
+      "overlap_label": "non-image",
+      "strict_holdout": true
+    },
+    {
+      "stimulus_id": "simple_cross_045deg",
+      "type": "simple",
+      "letter_cue": "E",
+      "coco_id": null,
+      "nsd_id": null,
+      "target_label": "crs_045.0deg_450L_43W.png",
+      "overlap_label": "non-image",
+      "strict_holdout": true
+    }
+  ],
+  "train_exclusions": {
+    "shared1000": true,
+    "setting_b_semantic_threshold": 0.85
+  },
+  "conditions": [
+    "image_only",
+    "text_only",
+    "combined"
+  ],
+  "seeds": [
+    42,
+    123,
+    456
+  ],
+  "reconstructions_per_seed": 10,
+  "retrieval_distractors": {
+    "N": 50,
+    "pool": "nsd_shared1000",
+    "distractor_resamples": 100
+  },
+  "embedding_2afc": {
+    "distractors_per_target": 5,
+    "within_type": true
+  },
+  "metrics": {
+    "top_k": [
+      1,
+      5,
+      10
+    ],
+    "primary_k": 1
+  }
+}

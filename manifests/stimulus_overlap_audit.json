@@ -1,0 +1,60 @@
+{
+  "version": "1.0.0",
+  "created": "2026-10-21T15:03:13+00:00",
+  "semantic_threshold": 0.85,
+  "clip_audit_status": "pending_weights",
+  "notes": "Semantic-neighbour and conceptual lemma holdout require CLIP ViT-L/14 and LLaVA caption files on disk; re-run after selective HF sync.",
+  "per_subject": {
+    "1": {
+      "exact_seen": [],
+      "exact_seen_count": 0,
+      "semantic_neighbours": [],
+      "semantic_neighbour_count": 0,
+      "setting_b_excluded_image_ids": [],
+      "conceptual_lemma_caption_matches": []
+    },
+    "2": {
+      "exact_seen": [
+        {
+          "stimulus_id": "complex_nsd30857",
+          "coco_id": 353830
+        },
+        {
+          "stimulus_id": "complex_nsd61178",
+          "coco_id": 209923
+        }
+      ],
+      "exact_seen_count": 2,
+      "semantic_neighbours": [],
+      "semantic_neighbour_count": 0,
+      "setting_b_excluded_image_ids": [],
+      "conceptual_lemma_caption_matches": []
+    },
+    "5": {
+      "exact_seen": [
+        {
+          "stimulus_id": "complex_nsd65873",
+          "coco_id": 490280
+        }
+      ],
+      "exact_seen_count": 1,
+      "semantic_neighbours": [],
+      "semantic_neighbour_count": 0,
+      "setting_b_excluded_image_ids": [],
+      "conceptual_lemma_caption_matches": []
+    },
+    "7": {
+      "exact_seen": [
+        {
+          "stimulus_id": "complex_nsd53882",
+          "coco_id": 181799
+        }
+      ],
+      "exact_seen_count": 1,
+      "semantic_neighbours": [],
+      "semantic_neighbour_count": 0,
+      "setting_b_excluded_image_ids": [],
+      "conceptual_lemma_caption_matches": []
+    }
+  }
+}
