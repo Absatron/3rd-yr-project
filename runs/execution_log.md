@@ -51,3 +51,38 @@
 **Next:** Invoke `execute-experiment` per ordered list in workflow execution log (Slurm smoke → M0 sync → scaffold → S0 → M1).
 
 ---
+
+## 2026-10-21 — S0 scaffold, Slurm smoke, M0 sync started (CSF)
+
+**Host:** CSF3 (`z29707aj`) via SSH BatchMode; repo `~/comp30030-mirage-ablation` @ `d9e745db6eda83348a2fbfbead30cdf9c00a0315`.
+
+**Commands (representative):**
+
+```bash
+# Slurm smoke (scratch cwd)
+cd ~/scratch/comp30030-mirage-ablation && sbatch ~/comp30030-mirage-ablation/scripts/csf/slurm_smoke.sbatch
+# → job 23495544, COMPLETED 0:0, ~2 min
+
+# M0 metadata + imagery betas
+cd ~/comp30030-mirage-ablation && DRYRUN=1 bash scripts/csf/sync_m0_metadata.sh
+nohup bash -c 'DRYRUN=0 bash scripts/csf/sync_m0_metadata.sh' \
+  > ~/scratch/comp30030-mirage-ablation/runs/m0_sync_2026-10-21.log 2>&1 &
+
+# S0 (scratch data root)
+export MIRAGE_ABLATION_DATA_ROOT=~/scratch/comp30030-mirage-ablation/data
+python scripts/s0_populate_manifests.py
+python scripts/s0_populate_manifests.py --audit --threshold 0.85
+python scripts/s0_verify_manifests.py --write-hashes
+
+# Selective HF (not full 300GB bundle)
+sbatch ~/comp30030-mirage-ablation/scripts/csf/hf_selective_download.sbatch
+# → job 23495715
+```
+
+**Artifacts:** Manifests committed on `main` (`manifests/nsd_imagery_test_manifest_v1.json`, `stimulus_overlap_audit.json`, `.sha256` sidecars). Registry updated: `csf.slurm_tutorial_complete: true`, manifest SHA256 recorded; `manifest_frozen_at` still null.
+
+**Human gates:** HG-0 **not signed** — investigator must review overlap audit (`exact_seen_count` 0 for subj1; 1–2 for subj 2/5/7) before training.
+
+**M1 plan:** When M0 log shows completion, run `sbatch --export=SUBJ=NN scripts/csf/sync_m1_perception_subj.sbatch` for `NN=01..08` (one subject at a time).
+
+---

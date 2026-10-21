@@ -107,6 +107,6 @@ Prerequisite: `ssh -O check csf3` → `Master running`.
 ssh csf3 'module load miniforge; export PATH=$HOME/.local/bin:$PATH; cd ~/comp30030-mirage-ablation && git pull && aws s3 ls s3://natural-scenes-dataset/ --no-sign-request | head -3'
 ```
 
-## Slurm (not yet smoke-tested)
+## Slurm
 
-Mark `csf.slurm_tutorial_complete: true` in `runs/registry.yaml` after first successful `sbatch` from `docs/CSF/10-min_tutorial.md`.
+Smoke-tested 2026-10-21: `scripts/csf/slurm_smoke.sbatch` job `23495544` (serial, exit `0:0`). `csf.slurm_tutorial_complete: true` in `runs/registry.yaml`.

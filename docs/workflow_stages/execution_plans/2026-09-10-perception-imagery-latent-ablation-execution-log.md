@@ -4,7 +4,7 @@
 **Slug:** `perception-imagery-latent-ablation`  
 **Model design:** Option 3 (dual-track hybrid)  
 **Started:** 2026-09-10  
-**Overall status:** **IN PROGRESS** — CSF + data-access ready; S0/M1 execution not started  
+**Overall status:** **IN PROGRESS** — S0 manifests populated; M0 scratch sync running on CSF; HG-0 pending  
 **Verdict:** N/A (no training yet)
 
 ---
@@ -13,7 +13,7 @@
 
 Kickoff (2026-09-10) created docs and registry. **2026-10-03–05:** CSF home/scratch layout, SSH multiplexing, miniforge, AWS CLI v2, Hugging Face login (`Absatron`), and `huggingface_hub<1.0` pin verified on CSF. **Investigator confirmed NSD Data Access Agreement submitted and approved** (2026-10-21). Scratch has no per-user quota; 3-month inactive-file cleanup applies.
 
-**Not done yet:** `mirage_ablation/` + S0 scripts, manifest JSON population (M0), bulk NSD/HF sync to scratch (M1), Slurm smoke, Track A vendoring.
+**2026-10-21 (execute-experiment):** `mirage_ablation/` S0 scaffold + manifest JSON committed (`d9e745d`); Slurm smoke **PASS** (job `23495544`); M0 `sync_m0_metadata.sh` dry-run + real sync **in progress** on scratch; selective HF download submitted (job `23495715`). **HG-0 not signed.** Track A vendoring still open.
 
 ---
 
@@ -34,13 +34,15 @@ Kickoff (2026-09-10) created docs and registry. **2026-10-03–05:** CSF home/sc
 | -- | ------- | ------ | ---------- |
 | ~~B1~~ | ~~NSD Data Access form~~ | — | **Resolved** — investigator confirmed submitted/approved; manual received |
 | ~~B2~~ | ~~NSD-Imagery access~~ | — | **Resolved** — same DUA; paths in prerequisites doc |
-| ~~B3~~ | ~~HF/AWS path to data~~ | — | **Resolved 2026-10-05** — smoke on CSF; selective download not run to scratch yet |
-| **B4** | `mirage_ablation/` + `scripts/s0_*` not implemented | Cannot run S0–S4 CLIs | **execute-experiment** next phase |
+| ~~B3~~ | ~~HF/AWS path to data~~ | — | **Resolved 2026-10-05** — smoke on CSF |
+| ~~B4~~ | ~~`mirage_ablation/` + `scripts/s0_*`~~ | — | **Resolved 2026-10-21** — S0 scaffold committed |
 | ~~B5~~ | ~~CSF access~~ | — | **Resolved 2026-10-02** |
 | ~~B6~~ | ~~CSF repo/scratch layout~~ | — | **Resolved 2026-10-03** |
-| **B7** | M0 manifest files not on disk | HG-0 blocked | Run S0 after small metadata sync + scaffold |
-| **B8** | `track_a/` + MIRAGE fork not vendored | Track A gate | Part of execute-experiment scaffold |
-| **B9** | Slurm smoke not recorded | Ops confidence | `10-min_tutorial.md` + registry flag |
+| **B7** | HG-0 investigator sign-off pending | Training blocked | Review manifests + overlap audit (`exact_seen` on subj 2/5/7 — verify) |
+| **B8** | `track_a/` + MIRAGE fork not vendored | Track A gate | Deferred post-M1 |
+| ~~B9~~ | ~~Slurm smoke not recorded~~ | — | **Resolved 2026-10-21** — job `23495544` |
+| **B10** | M0 scratch sync in progress | M1 imagery ingest | Monitor `runs/m0_sync_2026-10-21.log` on CSF |
+| **B11** | CLIP semantic audit `pending_weights` | S0.2 incomplete | After selective HF job `23495715` |
 
 ---
 
@@ -48,8 +50,8 @@ Kickoff (2026-09-10) created docs and registry. **2026-10-03–05:** CSF home/sc
 
 | Milestone | Target stages | Status | Notes |
 | --------- | ------------- | ------ | ----- |
-| **M0** — Manifest frozen | S0 | **IN PROGRESS** | B4, B7 — JSON not created yet |
-| **M1** — Data ready | S1–S4 | **NOT STARTED** | Scratch `data/raw` empty (~32K) |
+| **M0** — Manifest frozen | S0 | **IN PROGRESS** | JSON + SHA256 in repo; **HG-0 unsigned** |
+| **M1** — Data ready | S1–S4 | **IN PROGRESS** | M0 sync running; perception betas not started |
 | **M2** — Track A gate pass | TA.1–TA.5 | **BLOCKED** | Needs M0, M1, B8 |
 | M3 — Track B ridges fit | S5–S6 | NOT STARTED | — |
 | M4 — Latent cache complete | S7 | NOT STARTED | — |
@@ -66,7 +68,7 @@ Kickoff (2026-09-10) created docs and registry. **2026-10-03–05:** CSF home/sc
 
 | Gate | Status | Signed | Notes |
 | ---- | ------ | ------ | ----- |
-| HG-0 — Manifest freeze | PENDING | — | After S0 population + review |
+| HG-0 — Manifest freeze | PENDING | — | Manifests populated 2026-10-21 — **awaiting investigator review** |
 | HG-1 — Leakage checklist | PENDING | — | After S4 |
 | HG-2 — Track A S12 gate | PENDING | — | After M2 |
 | HG-3 — Parity audit | PENDING | — | — |
@@ -84,7 +86,8 @@ Kickoff (2026-09-10) created docs and registry. **2026-10-03–05:** CSF home/sc
 | 3 | HF CLI logged in on CSF | **Done** — `hf auth whoami` → Absatron |
 | 4 | AWS `s3 ls` NSD bucket `--no-sign-request` on CSF | **Done** |
 | 5 | Scratch space adequate | **Done** — shared Lustre; fair use; 3-month cleanup |
-| 6 | Manifests frozen (M0 / HG-0) | **Not done** — only `manifests/README.md` exists |
+| 6 | Manifests populated (M0 / HG-0) | **Populated** — freeze after HG-0 sign-off |
+| 7 | Slurm smoke | **Done** — `23495544` |
 
 ---
 
@@ -101,6 +104,21 @@ Kickoff (2026-09-10) created docs and registry. **2026-10-03–05:** CSF home/sc
 | AWS CLI v2 user install + `s3 ls` NSD | **PASS** |
 | Scratch layout present, empty data | **PASS** |
 
+### Execute-experiment — M0/S0 scaffold — 2026-10-21
+
+| Task | Result |
+| ---- | ------ |
+| CSF `git pull` @ `d9e745d` | **PASS** |
+| Slurm smoke `scripts/csf/slurm_smoke.sbatch` | **PASS** — job `23495544`, exit `0:0` |
+| M0 `DRYRUN=1 sync_m0_metadata.sh` on CSF | **PASS** |
+| M0 real sync (background) | **IN PROGRESS** — log `~/scratch/.../runs/m0_sync_2026-10-21.log` |
+| S0 manifest population (official `cue_pair_list.xlsx`) | **PASS** — 18 stimuli; hashes in repo |
+| Overlap audit (Setting A exact COCO) | **PARTIAL** — subj1 `exact_seen=0`; subj 2/5/7 >0 — **investigator review** |
+| Selective HF download | **SUBMITTED** — Slurm `23495715` |
+| HG-0 sign-off | **NOT DONE** (by design) |
+
+**M1 plan (next):** After M0 sync completes, submit `sync_m1_perception_subj.sbatch` with `SUBJ=01`…`08` sequentially (~45–65 GB/subject); then S1 ingest CLIs.
+
 ### Kickoff — 2026-09-10
 
 | Task | Result |
@@ -112,14 +130,12 @@ Kickoff (2026-09-10) created docs and registry. **2026-10-03–05:** CSF home/sc
 
 ## Next tasks (execute-experiment — ordered)
 
-1. `git pull` on CSF; `git push` from laptop if docs commit pending.
-2. Slurm smoke job → `csf.slurm_tutorial_complete: true`.
-3. **M0 prep sync** to scratch: NSD/NSD-Imagery **metadata** + imagery betas (see prerequisites Tier / M0 table); dry-run first.
-4. Implement `mirage_ablation/` minimal + `scripts/s0_populate_manifests.py` (or plan-equivalent).
-5. Run **S0** → investigator **HG-0** sign-off in `runs/execution_log.md`.
-6. **M1** perception betas sync (large; subject-at-a-time or Slurm) → S1–S4.
-7. Selective HF weights to `scratch/.../data/frozen_weights/`.
-8. Vendor `track_a/` + MIRAGE env → Track A TA.1+.
+1. Confirm M0 sync complete on CSF (`du` imagery betas ≈12 GB).
+2. **Investigator HG-0** — review `manifests/*.json` + overlap audit; sign `runs/execution_log.md`.
+3. Re-run S0.2 audit after HF selective sync completes; refresh hashes if needed.
+4. Submit M1 perception beta jobs: `sbatch --export=SUBJ=01 scripts/csf/sync_m1_perception_subj.sbatch` (×8).
+5. Implement S1–S4 ingest CLIs; HG-1 after S4.
+6. Vendor `track_a/` + MIRAGE env → Track A TA.1+ (still blocked until M1).
 
 ---
 

@@ -79,13 +79,14 @@ Increment `version` in `nsd_imagery_test_manifest_v1.json` and re-hash all downs
 
 ## Current status (2026-10-21)
 
-**Not populated.** Required JSON/SHA256 files **do not exist yet** in this directory.
+**Populated (HG-0 not signed).** JSON + `.sha256` sidecars are in this directory from official `cue_pair_list.xlsx` + `nsd_stim_info_merged.csv`.
 
 | Prerequisite | Status |
 | ------------ | ------ |
 | NSD DUA / imagery access | **Done** (investigator) |
-| CSF + S3/HF access | **Done** — see `docs/CSF/csf-environment.md` |
-| Metadata on scratch for S0 | **Pending** — execute-experiment sync |
-| `scripts/s0_populate_manifests.py` | **Pending** — B4 scaffold |
+| CSF + S3/HF access | **Done** |
+| Metadata on scratch | **In progress** — M0 `sync_m0_metadata.sh` on CSF |
+| S0 scripts / `mirage_ablation` | **Done** — commit `d9e745d` |
+| HG-0 investigator sign-off | **Pending** — see `runs/execution_log.md` |
 
-Do not create placeholder manifest JSON with synthetic stimulus IDs — population must use official NSD-Imagery documentation after sync.
+Re-run population after metadata path changes: `MIRAGE_ABLATION_DATA_ROOT=~/scratch/comp30030-mirage-ablation/data python scripts/s0_populate_manifests.py`

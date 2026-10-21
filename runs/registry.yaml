@@ -10,12 +10,12 @@ study:
   manifest_version: null  # set at M0 (e.g. "1.0.0")
 
 provenance:
-  git_commit: c9e89c2b65553c77c5f89330a84e664a04be8c1a
+  git_commit: d9e745db6eda83348a2fbfbead30cdf9c00a0315
   mirage_fork_commit: null
   mirage_notebook_commit: null
-  manifest_sha256: null
-  audit_sha256: null
-  manifest_frozen_at: null
+  manifest_sha256: 4c6f3f8ea8db94aaa636248117a7ca41545e9be46bb3bc5acd4e1c790a69cfa8
+  audit_sha256: f67fc4417a4aab7691d14fbc1c24653ddaa1ff99b38393146d3b468288e470ea
+  manifest_frozen_at: null  # HG-0 pending investigator sign-off
 
 csf:
   platform: csf3
@@ -28,7 +28,9 @@ csf:
   repo_cloned_at: "2026-10-03"
   ssh_multiplex_host: csf3
   ssh_multiplex_verified_at: "2026-10-03"
-  slurm_tutorial_complete: false
+  slurm_tutorial_complete: true
+  slurm_smoke_job_id: 23495544
+  slurm_smoke_completed_at: "2026-10-21"
   max_gpus_concurrent: 4
   miniforge_module: miniforge/24.11.2
   aws_cli_verified_at: "2026-10-05"
@@ -44,8 +46,11 @@ data_access:
   nsd_s3_no_sign_request_verified_on_csf_at: "2026-10-05"
   nsd_sync_completed_at: null
   nsd_imagery_sync_completed_at: null
+  m0_metadata_sync_started_at: "2026-10-21"
+  m0_sync_log: "~/scratch/comp30030-mirage-ablation/runs/m0_sync_2026-10-21.log"
   mirage_hf_selective_sync_completed_at: null
-  notes: "DUA complete; S3/HF smoke OK on CSF — bulk sync to scratch not started"
+  mirage_hf_selective_slurm_job_id: 23495715
+  notes: "M0 aws sync running on CSF (metadata+imagery betas); M1 perception betas planned per-subject sbatch"
 
 tracks:
   A:
@@ -58,15 +63,15 @@ tracks:
     status: not_started
     authoritative_for: [S8_decoder_metrics, S10_reconstruction, S11_statistics]
     artifact_root: artifacts/
-    package_status: not_started  # mirage_ablation/ + S0 scripts — next execute-experiment phase
+    package_status: s0_scaffold  # S1–S7 CLIs still deferred
 
 milestones:
   M0_manifest_frozen:
     status: in_progress
-    blocker: [B4_package_scaffold, S0_population_pending]
+    blocker: [HG-0_investigator_signoff, clip_audit_pending_weights]
   M1_data_ready:
-    status: not_started
-    blocker: [scratch_sync_pending, B4_package_scaffold]
+    status: in_progress
+    blocker: [m0_scratch_sync_in_progress, perception_betas_not_synced]
   M2_track_a_gate_pass:
     status: blocked
     blocker: [M0_manifest_frozen, M1_data_ready, track_a_not_vendored]
