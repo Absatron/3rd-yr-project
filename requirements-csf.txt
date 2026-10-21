@@ -1,0 +1,3 @@
+# CSF login-node / staging tools (after: module load miniforge)
+# Install: python -m pip install --user -r requirements-csf.txt
+huggingface_hub>=0.26,<1.0

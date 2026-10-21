@@ -5,6 +5,8 @@
 
 | Document                                   | Purpose                                           |
 | ------------------------------------------ | ------------------------------------------------- |
+| [ssh-access.md](./ssh-access.md)           | Mac SSH, Duo, ControlMaster, agent multiplexing   |
+| [csf-environment.md](./csf-environment.md) | miniforge, HF hub pin, AWS CLI, scratch, agent cmds |
 | [10-min_tutorial.md](./10-min_tutorial.md) | Slurm basics: home vs scratch, `sbatch`, `squeue` |
 | [response.md](./response.md)               | IT constraints: 4 GPU limit, scratch cleanup, RDS |
 | [overview.md](./overview.md)               | Hardware: A100, L40S, high-memory nodes           |

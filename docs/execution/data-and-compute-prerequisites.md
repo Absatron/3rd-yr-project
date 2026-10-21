@@ -2,7 +2,7 @@
 
 **Study:** Perception-to-Imagery Latent-Target Ablation (Option 3 — Dual-Track Hybrid)  
 **Date:** 2026-09-10  
-**Status:** Kickoff — data access pending  
+**Status:** CSF bootstrap complete (2026-10-05); NSD DUA confirmed (2026-10-21); scratch sync + S0 not started  
 **Execution plan:** `docs/workflow_stages/execution_plans/2026-09-10-perception-imagery-latent-ablation-execution-plan.md`
 
 This document clarifies what must be downloaded, from where, and what compute is required **before** GPU training or large Hugging Face syncs. It addresses the common confusion between the MIRAGE README's ~300 GB Hugging Face bundle and the actual NSD/NSD-Imagery neuroimaging requirements for this study.
@@ -276,7 +276,7 @@ flowchart TD
 | M2 / HG-2 | `gate_report.json` exit 0 | Track B S8–S11 reporting |
 | Package implementation | Data paths verified on disk | `mirage_ablation/` CLIs (deferred this kickoff) |
 
-**Current blocker (2026-09-10):** NSD and NSD-Imagery data access forms not yet submitted/approved. No GPU training or 300 GB download should proceed until selective artifact list is validated against approved data layout.
+**Current focus (2026-10-21):** Data access and CSF tooling are ready (`docs/CSF/csf-environment.md`). **Next:** sync M0-sized metadata to scratch, implement S0 scripts, populate manifests (HG-0), then M1 betas and selective HF weights. No full ~300 GB HF bundle. GPU training remains after M0/M1.
 
 ---
 

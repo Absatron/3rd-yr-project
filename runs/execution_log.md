@@ -37,3 +37,17 @@
 **Human gates:** None signed. HG-0 pending manifest population (blocked on data access + package scaffold).
 
 ---
+
+## 2026-10-21 — CSF ready; NSD DUA confirmed; route execute-experiment
+
+**Event:** Investigator confirmed NSD Data Access Agreement submitted and approved (manual received earlier). CSF bootstrap verified 2026-10-05: miniforge, `huggingface_hub<1.0`, HF login (Absatron), AWS CLI v2, NSD S3 `--no-sign-request`, empty scratch layout with ample shared pool.
+
+**Blockers cleared:** B1, B2, B3 (access path); B5, B6 (CSF layout/SSH).
+
+**Still open:** B4 package/S0 scripts; B7 manifest JSON not created; B8 Track A vendoring; B9 Slurm smoke; M1 scratch sync.
+
+**Human gates:** HG-0 still **pending** — manifests are **not** ready until S0 runs.
+
+**Next:** Invoke `execute-experiment` per ordered list in workflow execution log (Slurm smoke → M0 sync → scaffold → S0 → M1).
+
+---

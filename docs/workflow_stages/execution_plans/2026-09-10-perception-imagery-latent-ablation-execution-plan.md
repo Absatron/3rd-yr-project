@@ -298,8 +298,7 @@ Per-subject perception betas: sync to scratch per `docs/execution/data-and-compu
 ### CSF onboarding checklist (execution)
 
 - [x] CSF3 account and login (`z29707aj` on `login3[csf3]`)
-- [ ] Complete 10-minute Slurm tutorial (`docs/CSF/10-min_tutorial.md`) with own jobscript
-- [ ] Register for Intro to HPC (5 Nov 2026) if places available
+- [x] Complete 10-minute Slurm tutorial (`docs/CSF/10-min_tutorial.md`) with own jobscript
 - [ ] Create `~/scratch/comp30030-mirage-ablation/` layout
 - [ ] Clone repo to `~/comp30030-mirage-ablation/`
 - [ ] Record `csf.scratch_root` in `runs/registry.yaml`

@@ -77,11 +77,15 @@ Increment `version` in `nsd_imagery_test_manifest_v1.json` and re-hash all downs
 
 ---
 
-## Current status (2026-09-10)
+## Current status (2026-10-21)
 
-**Not populated.** S0 blocked on:
+**Not populated.** Required JSON/SHA256 files **do not exist yet** in this directory.
 
-- NSD / NSD-Imagery data access approval
-- `mirage_ablation/` package scaffold (deferred until data paths confirmed)
+| Prerequisite | Status |
+| ------------ | ------ |
+| NSD DUA / imagery access | **Done** (investigator) |
+| CSF + S3/HF access | **Done** — see `docs/CSF/csf-environment.md` |
+| Metadata on scratch for S0 | **Pending** — execute-experiment sync |
+| `scripts/s0_populate_manifests.py` | **Pending** — B4 scaffold |
 
-Do not create placeholder manifest JSON with synthetic stimulus IDs — population must use official NSD-Imagery documentation.
+Do not create placeholder manifest JSON with synthetic stimulus IDs — population must use official NSD-Imagery documentation after sync.

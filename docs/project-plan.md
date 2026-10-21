@@ -1,7 +1,7 @@
 # COMP30030 Project Plan: Perception-to-Imagery Latent-Target Ablation
 
 **Student:** Abdullah James  
-**Supervisor:** Dr Jingyuan [Surname]  
+**Supervisor:** Dr Jingyuan Sun  
 **Start:** Week 0, 21 September 2026  
 **Target:** Full dissertation **draft** by start of Semester 2 (~2 February 2027); implementation freeze and code submission per handbook; final report and screencast by official deadline.
 
@@ -151,7 +151,7 @@ I used a **milestone-driven** approach with **quality gates**, combining fixed u
 
 ## Next actions
 
-1. Show supervisor **`docs/project-plan-gantt.csv`** (open in Excel) + this document.
+1. Show supervisor `docs/project-plan-gantt.csv` (open in Excel) + this document.
 2. Finish CSF 10-minute tutorial; create `~/scratch/comp30030-mirage-ablation/`.
 3. Clone repo on CSF home; add first `scripts/csf/` jobscript template.
 4. NSD DUA → Tier 1–2 sync on login node → M0 on scratch.

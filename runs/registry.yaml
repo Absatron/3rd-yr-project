@@ -22,19 +22,30 @@ csf:
   username: z29707aj
   login_verified_at: "2026-10-02"
   home_project_dir: "~/comp30030-mirage-ablation"
+  home_project_dir_absolute: "/mnt/iusers01/fse-ugpgt01/compsci01/z29707aj/comp30030-mirage-ablation"
   scratch_root: "~/scratch/comp30030-mirage-ablation"
+  scratch_root_absolute: "/net/scratch/z29707aj/comp30030-mirage-ablation"
+  repo_cloned_at: "2026-10-03"
+  ssh_multiplex_host: csf3
+  ssh_multiplex_verified_at: "2026-10-03"
   slurm_tutorial_complete: false
   max_gpus_concurrent: 4
-  notes: "See docs/CSF/ and execution plan CSF3 operational workflow"
+  miniforge_module: miniforge/24.11.2
+  aws_cli_verified_at: "2026-10-05"
+  huggingface_cli_verified_at: "2026-10-05"
+  huggingface_hub_pin: ">=0.26,<1.0"
+  notes: "Login is password+Duo only on csf3; use ControlMaster (docs/CSF/ssh-access.md). Bootstrap: docs/CSF/csf-environment.md"
 
 data_access:
-  nsd_form_submitted: false
-  nsd_form_approved: false
-  nsd_imagery_access_confirmed: false
+  nsd_form_submitted: true
+  nsd_form_approved: true
+  nsd_form_confirmed_by_investigator_at: "2026-10-21"
+  nsd_imagery_access_confirmed: true
+  nsd_s3_no_sign_request_verified_on_csf_at: "2026-10-05"
   nsd_sync_completed_at: null
   nsd_imagery_sync_completed_at: null
   mirage_hf_selective_sync_completed_at: null
-  notes: "NSD pending; CSF ready — sync to scratch from login node"
+  notes: "DUA complete; S3/HF smoke OK on CSF — bulk sync to scratch not started"
 
 tracks:
   A:
@@ -47,18 +58,18 @@ tracks:
     status: not_started
     authoritative_for: [S8_decoder_metrics, S10_reconstruction, S11_statistics]
     artifact_root: artifacts/
-    package_status: deferred  # mirage_ablation not implemented until data access confirmed
+    package_status: not_started  # mirage_ablation/ + S0 scripts — next execute-experiment phase
 
 milestones:
   M0_manifest_frozen:
-    status: blocked
-    blocker: data_access_pending
+    status: in_progress
+    blocker: [B4_package_scaffold, S0_population_pending]
   M1_data_ready:
-    status: blocked
-    blocker: data_access_pending
+    status: not_started
+    blocker: [scratch_sync_pending, B4_package_scaffold]
   M2_track_a_gate_pass:
     status: blocked
-    blocker: [data_access_pending, M1_data_ready]
+    blocker: [M0_manifest_frozen, M1_data_ready, track_a_not_vendored]
   M3_track_b_ridges_fit:
     status: not_started
   M4_latent_cache_complete:
