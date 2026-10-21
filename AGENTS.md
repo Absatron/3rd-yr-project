@@ -50,3 +50,15 @@ Heavy work runs on **CSF3 Slurm**, not the laptop. **`docs/CSF/ssh-access.md`** 
 - **M2 / HG-2:** Track A S12 PASS before Track B ablation **reporting**.
 
 See execution log **Active blockers** before starting GPU stages.
+
+## Long jobs — submit and hand off (token-efficient)
+
+Do **not** keep an agent turn open while waiting on multi-hour work.
+
+| Work | Agent pattern |
+|------|----------------|
+| `sbatch` (ridge, GPU, sync) | Submit, log `job_id` + `sacct` check command in execution log, **end turn** |
+| Large `aws s3 sync` | Prefer `scripts/csf/*.sbatch`; avoid foreground sync in chat |
+| HF bulk download | Batch job or bounded smoke; do not poll until complete |
+
+Investigator or a **new** turn checks `squeue` / `sacct` / scratch `du` when jobs finish. Cluster jobs run without an open SSH session.
