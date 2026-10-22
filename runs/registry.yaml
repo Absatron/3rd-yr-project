@@ -7,15 +7,15 @@ study:
   model_design: option-3-dual-track
   execution_plan: docs/workflow_stages/execution_plans/2026-09-10-perception-imagery-latent-ablation-execution-plan.md
   plan_approved_at: "2026-09-10"
-  manifest_version: null  # set at M0 (e.g. "1.0.0")
+  manifest_version: "1.0.0"
 
 provenance:
-  git_commit: d9e745db6eda83348a2fbfbead30cdf9c00a0315
+  git_commit: ec39711a9d16c90ed385b38c0c70ab8533d7c252
   mirage_fork_commit: null
   mirage_notebook_commit: null
   manifest_sha256: 4c6f3f8ea8db94aaa636248117a7ca41545e9be46bb3bc5acd4e1c790a69cfa8
   audit_sha256: 890c94bfb3f7cdb4e7a603594365e8b65db459d54325ec6ee2c59a14223b1fc8
-  manifest_frozen_at: null  # HG-0 pending investigator sign-off
+  manifest_frozen_at: "2026-10-22"
 
 csf:
   platform: csf3
@@ -48,9 +48,17 @@ data_access:
   nsd_imagery_sync_completed_at: null
   m0_metadata_sync_started_at: "2026-10-21"
   m0_sync_log: "~/scratch/comp30030-mirage-ablation/runs/m0_sync_2026-10-21.log"
-  mirage_hf_selective_sync_completed_at: null
+  m0_metadata_sync_completed_at: "2026-10-21"
+  nsd_imagery_sync_completed_at: "2026-10-21"
+  mirage_hf_selective_sync_completed_at: "2026-10-21"
   mirage_hf_selective_slurm_job_id: 23495715
-  notes: "M0 aws sync running on CSF (metadata+imagery betas); M1 perception betas planned per-subject sbatch"
+  mirage_hf_selective_notes: "Captions on scratch; no CLIP paths in HF dataset (B11)"
+  m1_perception_sync:
+    started_at: "2026-10-22"
+    current_subject: "01"
+    slurm_job_id: 23630151
+    submit_command: "sbatch --cpus-per-task=2 --export=SUBJ=01 scripts/csf/sync_m1_perception_subj.sbatch"
+  notes: "M0 complete; M1 perception betas in progress (subj01 job 23630151)"
 
 tracks:
   A:
@@ -67,11 +75,11 @@ tracks:
 
 milestones:
   M0_manifest_frozen:
-    status: in_progress
-    blocker: [HG-0_investigator_signoff, clip_audit_pending_weights]
+    status: complete
+    blocker: [clip_audit_pending_weights]
   M1_data_ready:
     status: in_progress
-    blocker: [m0_scratch_sync_in_progress, perception_betas_not_synced]
+    blocker: [perception_betas_not_synced]
   M2_track_a_gate_pass:
     status: blocked
     blocker: [M0_manifest_frozen, M1_data_ready, track_a_not_vendored]
@@ -95,9 +103,10 @@ milestones:
 
 human_gates:
   HG-0_manifest_freeze:
-    status: pending
-    signed_at: null
-    signed_by: null
+    status: signed
+    signed_at: "2026-10-22"
+    signed_by: investigator
+    statement: "Manifests and overlap audit reviewed; mirage_split_verification accepted for S12 reproduction."
   HG-1_leakage_checklist:
     status: pending
   HG-2_track_a_s12_gate:

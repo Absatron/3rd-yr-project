@@ -4,7 +4,7 @@
 **Slug:** `perception-imagery-latent-ablation`  
 **Model design:** Option 3 (dual-track hybrid)  
 **Started:** 2026-09-10  
-**Overall status:** **IN PROGRESS** — S0 manifests populated; M0 scratch sync running on CSF; HG-0 pending  
+**Overall status:** **IN PROGRESS** — HG-0 signed (2026-10-22); M0 complete; M1 perception beta sync started (subj01)  
 **Verdict:** N/A (no training yet)
 
 ---
@@ -38,11 +38,12 @@ Kickoff (2026-09-10) created docs and registry. **2026-10-03–05:** CSF home/sc
 | ~~B4~~ | ~~`mirage_ablation/` + `scripts/s0_*`~~ | — | **Resolved 2026-10-21** — S0 scaffold committed |
 | ~~B5~~ | ~~CSF access~~ | — | **Resolved 2026-10-02** |
 | ~~B6~~ | ~~CSF repo/scratch layout~~ | — | **Resolved 2026-10-03** |
-| **B7** | HG-0 investigator sign-off pending | Training blocked | Review manifests + overlap audit; run `compare_mirage_training_split.py --write-audit` |
-| **B8** | `track_a/` + MIRAGE fork not vendored | Track A gate | Deferred post-M1 |
+| ~~B7~~ | ~~HG-0 investigator sign-off~~ | — | **Resolved 2026-10-22** — manifest `1.0.0` frozen |
+| **B8** | `track_a/` + MIRAGE fork not vendored | Track A gate (M2) | Deferred post-M1 perception sync |
 | ~~B9~~ | ~~Slurm smoke not recorded~~ | — | **Resolved 2026-10-21** — job `23495544` |
-| **B10** | M0 scratch sync in progress | M1 imagery ingest | Monitor `runs/m0_sync_2026-10-21.log` on CSF |
-| **B11** | CLIP semantic audit `pending_weights` | S0.2 incomplete | After selective HF job `23495715` |
+| ~~B10~~ | ~~M0 scratch sync in progress~~ | — | **Resolved 2026-10-21** — log `2026-10-21T16:15:38+01:00`; ~12G `data/raw` |
+| **B11** | CLIP semantic audit `pending_weights` | S0.2 incomplete | HF selective job delivered captions only; no `*clip*` paths on `reesekneeland/MIRAGE` dataset — need CLIP source per plan |
+| **B12** | S1–S4 ingest CLIs not implemented | M1 ingest blocked | `mirage_ablation/ingest/` stub only — route `execute-implementation-plan` |
 
 ---
 
@@ -50,8 +51,8 @@ Kickoff (2026-09-10) created docs and registry. **2026-10-03–05:** CSF home/sc
 
 | Milestone | Target stages | Status | Notes |
 | --------- | ------------- | ------ | ----- |
-| **M0** — Manifest frozen | S0 | **IN PROGRESS** | JSON + SHA256 in repo; **HG-0 unsigned** |
-| **M1** — Data ready | S1–S4 | **IN PROGRESS** | M0 sync running; perception betas not started |
+| **M0** — Manifest frozen | S0 | **COMPLETE** | HG-0 signed 2026-10-22; SHA256 in registry |
+| **M1** — Data ready | S1–S4 | **IN PROGRESS** | M0 on scratch; M1 subj01 Slurm `23630151`; S1–S4 **DEFERRED** (no CLIs) |
 | **M2** — Track A gate pass | TA.1–TA.5 | **BLOCKED** | Needs M0, M1, B8 |
 | M3 — Track B ridges fit | S5–S6 | NOT STARTED | — |
 | M4 — Latent cache complete | S7 | NOT STARTED | — |
@@ -68,7 +69,7 @@ Kickoff (2026-09-10) created docs and registry. **2026-10-03–05:** CSF home/sc
 
 | Gate | Status | Signed | Notes |
 | ---- | ------ | ------ | ----- |
-| HG-0 — Manifest freeze | PENDING | — | Manifests populated 2026-10-21 — **awaiting investigator review** |
+| HG-0 — Manifest freeze | **SIGNED** | 2026-10-22 | Investigator; manifest `1.0.0` |
 | HG-1 — Leakage checklist | PENDING | — | After S4 |
 | HG-2 — Track A S12 gate | PENDING | — | After M2 |
 | HG-3 — Parity audit | PENDING | — | — |
@@ -119,6 +120,31 @@ Kickoff (2026-09-10) created docs and registry. **2026-10-03–05:** CSF home/sc
 
 **M1 plan (next):** After M0 sync completes, submit `sync_m1_perception_subj.sbatch` with `SUBJ=01`…`08` sequentially (~45–65 GB/subject); then S1 ingest CLIs.
 
+### Execute-experiment — M1 kickoff — 2026-10-22
+
+| Task | Result |
+| ---- | ------ |
+| CSF `git pull` (`d9e745d` → `ec39711`) | **PASS** |
+| M0 verify: log end `2026-10-21T16:15:38+01:00`; `data/raw` ≈12G | **PASS** |
+| M0 verify: `nsd_stim_info_merged.csv`, `cue_pair_list.xlsx` on scratch | **PASS** |
+| M0 verify: imagery betas subj01–08 (~1.3–1.7G/subj) | **PASS** |
+| HF selective job `23495715` (`sacct`) | **UNKNOWN** — SlurmDB `Connection refused` on login node |
+| HF artifacts on scratch | **PARTIAL** — captions `.npy` only; no CLIP weights (HF dataset has no `*clip*` paths) |
+| S0.2 CLIP audit re-run | **SKIPPED** — weights absent (B11) |
+| M1 `sbatch` subj01 (plain) | **FAIL** — multicore requires ≥2 CPUs |
+| M1 `sbatch --cpus-per-task=2 --export=SUBJ=01` | **SUBMITTED** — job `23630151`, partition `multicore`, node `node1229` |
+| S1–S4 ingest | **DEFERRED** — no ingest CLIs in repo (B12) |
+
+**Monitor M1 subj01:**
+
+```bash
+ssh -o BatchMode=yes csf3 'squeue -u z29707aj; tail -f ~/comp30030-mirage-ablation/slurm-m1-subj-23630151.out'
+ssh -o BatchMode=yes csf3 'sacct -j 23630151 --format=JobID,State,ExitCode,Elapsed -X'
+du -sh ~/scratch/comp30030-mirage-ablation/data/raw/nsd/betas/subj01
+```
+
+**After subj01 COMPLETED:** submit `SUBJ=02` … `08` (one at a time). Repo `sync_m1_perception_subj.sbatch` patched with `#SBATCH --cpus-per-task=2` (push + `git pull` on CSF).
+
 ### Kickoff — 2026-09-10
 
 | Task | Result |
@@ -130,12 +156,11 @@ Kickoff (2026-09-10) created docs and registry. **2026-10-03–05:** CSF home/sc
 
 ## Next tasks (execute-experiment — ordered)
 
-1. Confirm M0 sync complete on CSF (`du` imagery betas ≈12 GB).
-2. **Investigator HG-0** — review `manifests/*.json` + overlap audit; sign `runs/execution_log.md`.
-3. Re-run S0.2 audit after HF selective sync completes; refresh hashes if needed.
-4. Submit M1 perception beta jobs: `sbatch --export=SUBJ=01 scripts/csf/sync_m1_perception_subj.sbatch` (×8).
-5. Implement S1–S4 ingest CLIs; HG-1 after S4.
-6. Vendor `track_a/` + MIRAGE env → Track A TA.1+ (still blocked until M1).
+1. **Investigator:** When job `23630151` completes, confirm `data/raw/nsd/betas/subj01` size (~45–65 GB); submit M1 for `SUBJ=02`…`08`.
+2. Resolve B11 — define CLIP checkpoint source (not on `reesekneeland/MIRAGE` HF dataset); then `s0_populate_manifests.py --audit` + `compare_mirage_training_split.py --write-audit`.
+3. Route **execute-implementation-plan** for S1–S4 ingest CLIs (B12); HG-1 after S4.
+4. Vendor `track_a/` + MIRAGE env (B8) after M1 perception betas on scratch for train subjects.
+5. Do **not** start Track A GPU until M1 perception sync complete for required subjects.
 
 ---
 

@@ -3,6 +3,7 @@
 # Usage: sbatch --export=SUBJ=01 sync_m1_perception_subj.sbatch
 
 #SBATCH -p multicore
+#SBATCH --cpus-per-task=2
 #SBATCH -t 24:00:00
 #SBATCH -o slurm-m1-subj-%j.out
 #SBATCH -J mirage_m1_beta

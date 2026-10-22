@@ -86,3 +86,37 @@ sbatch ~/comp30030-mirage-ablation/scripts/csf/hf_selective_download.sbatch
 **M1 plan:** When M0 log shows completion, run `sbatch --export=SUBJ=NN scripts/csf/sync_m1_perception_subj.sbatch` for `NN=01..08` (one subject at a time).
 
 ---
+
+## 2026-10-22 — HG-0 manifest freeze signed
+
+**Event:** Investigator reviewed and signed **HG-0** (manifest `1.0.0`, overlap audit with `mirage_split_verification.all_subjects_agree`).
+
+**Recorded in:** `runs/registry.yaml` (`manifest_frozen_at: 2026-10-22`).
+
+**Cleared:** B7 (HG-0). M0 sync confirmed complete on CSF (log ended 2026-10-21T16:15:38+01:00; ~12G `data/raw`).
+
+**Next:** M1 — perception beta sync per subject via Slurm; then S1–S4 when ingest CLIs exist. B11 (CLIP semantic audit) remains non-blocking for M1 sync.
+
+---
+
+## 2026-10-22 — M1 perception sync started (CSF)
+
+**Host:** CSF3 via SSH BatchMode; repo pulled to `ec39711`.
+
+**M0 verification (scratch):** `m0_sync_2026-10-21.log` ended `2026-10-21T16:15:38+01:00`; `data/raw` ≈12G; `nsd_stim_info_merged.csv` and `cue_pair_list.xlsx` present; imagery betas for subj01–08 (~1.3–1.7G each).
+
+**M1 submission:**
+
+```bash
+cd ~/comp30030-mirage-ablation
+sbatch --cpus-per-task=2 --export=SUBJ=01 scripts/csf/sync_m1_perception_subj.sbatch
+# → job 23630151 (RUNNING on multicore)
+```
+
+**HF selective (`23495715`):** Captions on scratch under `data/frozen_weights/mirage_hf/`; `sacct` unavailable (DB connection refused). No CLIP weight files — MIRAGE HF dataset has no `clip`-named artifacts (B11).
+
+**S1–S4:** **DEFERRED** — ingest package stub only (B12).
+
+**Monitor:** `squeue -u z29707aj`; `sacct -j 23630151 -X`; `slurm-m1-subj-23630151.out` in CSF home repo.
+
+---
