@@ -55,10 +55,18 @@ data_access:
   mirage_hf_selective_notes: "Captions on scratch; no CLIP paths in HF dataset (B11)"
   m1_perception_sync:
     started_at: "2026-10-22"
-    current_subject: "01"
-    slurm_job_id: 23630151
-    submit_command: "sbatch --cpus-per-task=2 --export=SUBJ=01 scripts/csf/sync_m1_perception_subj.sbatch"
-  notes: "M0 complete; M1 perception betas in progress (subj01 job 23630151)"
+    subjects_complete:
+      - id: "01"
+        slurm_job_id: 23630151
+        exit_state: COMPLETED
+        scratch_size: "61G"
+        completed_at: "2026-10-22"
+    current_subject: "02"
+    slurm_job_id: 23816141
+    slurm_state: PENDING
+    submit_command: "sbatch --export=SUBJ=02 scripts/csf/sync_m1_perception_subj.sbatch"
+    slurm_estimated_start: "2026-11-02T03:15"
+  notes: "M0 complete; M1 subj01 on scratch; subj02 job 23816141 pending; subj03-08 not submitted"
 
 tracks:
   A:

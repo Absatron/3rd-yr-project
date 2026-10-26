@@ -120,3 +120,23 @@ sbatch --cpus-per-task=2 --export=SUBJ=01 scripts/csf/sync_m1_perception_subj.sb
 **Monitor:** `squeue -u z29707aj`; `sacct -j 23630151 -X`; `slurm-m1-subj-23630151.out` in CSF home repo.
 
 ---
+
+## 2026-10-26 — M1 perception sync continuation (CSF)
+
+**Host:** CSF3 via SSH BatchMode; repo pulled `ec39711` → `498738a`.
+
+**Verified:** subj01 perception betas **61G** on scratch; job `23630151` **COMPLETED** (`0:0`, 7m20s). subj02–08 dirs absent.
+
+**Submitted:**
+
+```bash
+cd ~/comp30030-mirage-ablation
+sbatch --export=SUBJ=02 scripts/csf/sync_m1_perception_subj.sbatch
+# → job 23816141 (PENDING, Reason=Priority; Slurm est. start 2026-11-02 03:15)
+```
+
+**Remaining:** After subj02 completes, submit `SUBJ=03` … `08` sequentially.
+
+**Monitor:** `squeue -j 23816141`; `sacct -j 23816141 -X`; `slurm-m1-subj-23816141.out`; `du -sh ~/scratch/.../betas/subj02`.
+
+---
