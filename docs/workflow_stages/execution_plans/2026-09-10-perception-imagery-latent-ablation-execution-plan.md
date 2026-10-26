@@ -293,7 +293,7 @@ aws s3 sync --no-sign-request s3://natural-scenes-dataset/nsddata/experiments/ns
   ~/scratch/comp30030-mirage-ablation/data/raw/nsd_imagery/experiments/nsdimagery/
 ```
 
-Per-subject perception betas: sync to scratch per `docs/execution/data-and-compute-prerequisites.md` Tier 3. Log commands in `runs/execution_log.md`.
+Per-subject perception betas: sync to scratch per `docs/execution/data-and-compute-prerequisites.md` Tier 3. Use **`scripts/csf/sync_m1_perception_subj.sbatch`** on **`serial`** (one `SUBJ=01`…`08` at a time; ~45–65 GB/subject). Do **not** use `multicore` for this I/O job — long `Priority` queue waits observed on CSF3 (2026-10-26). Log job IDs in `runs/execution_log.md`.
 
 ### CSF onboarding checklist (execution)
 

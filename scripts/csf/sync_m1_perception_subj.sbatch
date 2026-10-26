@@ -2,8 +2,10 @@
 # M1 Tier-3: sync one subject's NSD perception betas to scratch (large I/O).
 # Usage: sbatch --export=SUBJ=01 sync_m1_perception_subj.sbatch
 
-#SBATCH -p multicore
-#SBATCH --cpus-per-task=2
+# I/O-bound S3 sync; serial queue starts much faster than multicore on CSF3.
+#SBATCH -p serial
+#SBATCH --ntasks=1
+#SBATCH --cpus-per-task=1
 #SBATCH -t 24:00:00
 #SBATCH -o slurm-m1-subj-%j.out
 #SBATCH -J mirage_m1_beta

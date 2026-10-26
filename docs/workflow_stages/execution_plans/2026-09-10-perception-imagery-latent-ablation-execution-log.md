@@ -4,7 +4,7 @@
 **Slug:** `perception-imagery-latent-ablation`  
 **Model design:** Option 3 (dual-track hybrid)  
 **Started:** 2026-09-10  
-**Overall status:** **IN PROGRESS** — HG-0 signed (2026-10-22); M0 complete; M1 perception betas subj01 **COMPLETE** (61G); subj02 **PENDING** (job `23816141`); subj03–08 not started  
+**Overall status:** **IN PROGRESS** — HG-0 signed; M0 complete; M1 perception sync on **`serial`** — subj01 **COMPLETE** (61G); subj02 **RUNNING** (job `23824802`); subj03–08 queued after subj02  
 **Verdict:** N/A (no training yet)
 
 ---
@@ -166,6 +166,18 @@ ssh -o BatchMode=yes csf3 'du -sh ~/scratch/comp30030-mirage-ablation/data/raw/n
 
 **When subj02 COMPLETED (~45–65G):** submit `SUBJ=03` … `08` sequentially (one sbatch at a time).
 
+### Execute-experiment — M1 serial partition — 2026-10-26
+
+| Task | Result |
+| ---- | ------ |
+| Diagnose multicore queue | subj02 job `23816141` **PENDING (Priority)** ~2h+; `scontrol` est. start ~4 days; not a script error |
+| Test subj03 on multicore | Job `23824709` also **PENDING (Priority)** — same queue behaviour |
+| Cancel multicore jobs | `scancel 23816141`, `scancel 23824709` |
+| M1 subj02 on **`serial`** | **SUBMITTED** job `23824802` — **RUNNING** immediately (`node921`) |
+| Repo default partition | `sync_m1_perception_subj.sbatch` → `#SBATCH -p serial`, 1 CPU (docs updated) |
+
+**Policy:** All remaining M1 perception syncs use **`serial`** only. Use **`multicore`** later for S1–S2 ingest / parallel CPU, not for `aws s3 sync`.
+
 ### Kickoff — 2026-09-10
 
 | Task | Result |
@@ -177,7 +189,7 @@ ssh -o BatchMode=yes csf3 'du -sh ~/scratch/comp30030-mirage-ablation/data/raw/n
 
 ## Next tasks (execute-experiment — ordered)
 
-1. **Investigator / execute-experiment:** When job `23816141` **COMPLETED**, confirm subj02 ~45–65 GB; submit M1 for `SUBJ=03`…`08` (one at a time). subj01 done (61G, `23630151`).
+1. **execute-experiment:** When job `23824802` **COMPLETED**, confirm subj02 ~45–65 GB; submit M1 `SUBJ=03`…`08` via **`serial`** sbatch (one at a time). subj01 done (61G, `23630151`).
 2. Resolve B11 — define CLIP checkpoint source (not on `reesekneeland/MIRAGE` HF dataset); then `s0_populate_manifests.py --audit` + `compare_mirage_training_split.py --write-audit`.
 3. Route **execute-implementation-plan** for S1–S4 ingest CLIs (B12); HG-1 after S4.
 4. Vendor `track_a/` + MIRAGE env (B8) after M1 perception betas on scratch for train subjects.

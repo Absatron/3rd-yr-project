@@ -110,3 +110,17 @@ ssh csf3 'module load miniforge; export PATH=$HOME/.local/bin:$PATH; cd ~/comp30
 ## Slurm
 
 Smoke-tested 2026-10-21: `scripts/csf/slurm_smoke.sbatch` job `23495544` (serial, exit `0:0`). `csf.slurm_tutorial_complete: true` in `runs/registry.yaml`.
+
+### M1 perception beta sync (`sync_m1_perception_subj.sbatch`)
+
+| Topic | Detail |
+|-------|--------|
+| **Workload** | `aws s3 sync` of one subject’s NSD `betas_fithrf` (~45–65 GB) — **I/O-bound**, not multi-core compute |
+| **Partition** | **`serial`** (`#SBATCH -p serial`, 1 CPU). Do **not** use `multicore` for this script |
+| **Why not multicore** | On CSF3 (2026-10-26), `multicore` jobs with 2 CPUs sat **PENDING (Priority)** for hours with Slurm **estimated start ~4 days** ahead; identical work on **`serial` started within ~1 minute** |
+| **Submit** | One subject at a time: `sbatch --export=SUBJ=02 scripts/csf/sync_m1_perception_subj.sbatch` (repeat `03`…`08`) |
+| **Runtime** | ~7–15 minutes active sync per subject once the job is **RUNNING** (subj01 serial-equivalent: ~7m on multicore when queue was short) |
+| **Monitor** | `squeue -u $USER`; `sacct -j JOBID -X`; `tail slurm-m1-subj-JOBID.out`; `du -sh ~/scratch/.../data/raw/nsd/betas/subjNN` |
+| **Queue diagnosis** | `scontrol show job JOBID` → `Reason=` and `StartTime=` (estimated). `Reason=Priority` on `multicore` ≠ script failure |
+
+**Later stages** still use **`multicore`**, **high-memory**, or **GPU** partitions for ingest, ridge, and diffusion (see execution plan § CSF3).

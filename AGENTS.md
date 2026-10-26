@@ -46,7 +46,7 @@ Heavy work runs on **CSF3 Slurm**, not the laptop. **`docs/CSF/ssh-access.md`** 
 ## Gating (do not skip)
 
 - **M0 / HG-0:** Manifest frozen before training.
-- **M1 (S1–S4):** NSD + NSD-Imagery on scratch before ridge or Track A training.
+- **M1 (S1–S4):** NSD + NSD-Imagery on scratch before ridge or Track A training. Perception beta S3 sync: `scripts/csf/sync_m1_perception_subj.sbatch` on **`serial`**, one `SUBJ` at a time (`docs/CSF/csf-environment.md`).
 - **M2 / HG-2:** Track A S12 PASS before Track B ablation **reporting**.
 
 See execution log **Active blockers** before starting GPU stages.

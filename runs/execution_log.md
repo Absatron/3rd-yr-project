@@ -99,6 +99,14 @@ sbatch ~/comp30030-mirage-ablation/scripts/csf/hf_selective_download.sbatch
 
 ---
 
+## 2026-10-26 — M1 sync: use `serial` partition
+
+**Event:** `multicore` M1 jobs (`23816141`, `23824709`) stuck **PENDING (Priority)** with multi-day estimated start. **`serial`** job `23824802` (subj02) started immediately.
+
+**Policy:** `scripts/csf/sync_m1_perception_subj.sbatch` defaults to **`serial`**; documented in `docs/CSF/csf-environment.md` and prerequisites. Remaining subjects **03–08** after subj02 completes.
+
+---
+
 ## 2026-10-22 — M1 perception sync started (CSF)
 
 **Host:** CSF3 via SSH BatchMode; repo pulled to `ec39711`.

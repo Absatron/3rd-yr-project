@@ -180,6 +180,8 @@ Inspect repo file trees on Hugging Face before syncing; pin exact filenames in `
 
 **Estimated download (M1):** ~50–120 GB (dominated by NSD betas for 8 subjects + encoder weights; **not** the full 300 GB HF bundle).
 
+**Perception betas on CSF (Tier 3):** Submit `scripts/csf/sync_m1_perception_subj.sbatch` **once per subject** (`SUBJ=01`…`08`) on the **`serial`** partition (default in the jobscript). This is S3 I/O only; **`multicore` queue wait can be multi-day** when the cluster is busy. See `docs/CSF/csf-environment.md` § M1 perception beta sync.
+
 **Blocks:** HG-1 (leakage checklist) → unblocks S5 ridge training and Track A.
 
 ### M2 — Track A gate pass (TA.1–TA.5)

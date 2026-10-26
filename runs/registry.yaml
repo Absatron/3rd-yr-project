@@ -61,12 +61,13 @@ data_access:
         exit_state: COMPLETED
         scratch_size: "61G"
         completed_at: "2026-10-22"
+    partition_policy: serial
     current_subject: "02"
-    slurm_job_id: 23816141
-    slurm_state: PENDING
+    slurm_job_id: 23824802
+    slurm_state: RUNNING
     submit_command: "sbatch --export=SUBJ=02 scripts/csf/sync_m1_perception_subj.sbatch"
-    slurm_estimated_start: "2026-11-02T03:15"
-  notes: "M0 complete; M1 subj01 on scratch; subj02 job 23816141 pending; subj03-08 not submitted"
+    cancelled_multicore_jobs: [23816141, 23824709]
+  notes: "M1 sync uses serial partition; subj02 job 23824802; subj03-08 after subj02 COMPLETED"
 
 tracks:
   A:
