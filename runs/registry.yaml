@@ -75,21 +75,24 @@ data_access:
         scratch_size: "~50G"
         elapsed: "00:22:31"
         completed_at: "2026-10-26"
-    subjects_failed_partial:
-      - id: "04"
-        slurm_job_id: 23828368
-        exit_state: FAILED
-        exit_code: "1:0"
-        scratch_size: "36G"
-        cause: "AWS_IO_SOCKET_TIMEOUT (CSF→S3); not VPN-related"
-        retry: "re-sbatch SUBJ=04; sync script now retries up to 3 passes"
+    perception_sync_all_subjects_verified_at: "2026-10-27"
+    scratch_sizes_gb:
+      "01": 61
+      "02": 62
+      "03": 49
+      "04": 43
+      "05": 52
+      "06": 55
+      "07": 52
+      "08": 42
+    s3_file_count_parity: "8/8 subjects match S3 object counts except subj03 (+62 extra local files, harmless)"
     partition_policy: serial
-    current_subject: "04"
+    current_subject: null
     slurm_job_id: null
-    slurm_state: null
+    slurm_state: COMPLETE
     submit_command: "sbatch --export=SUBJ=NN scripts/csf/sync_m1_perception_subj.sbatch"
     cancelled_multicore_jobs: [23816141, 23824709, 23826369]
-  notes: "subj01-03 complete; subj04 partial — retry 04 then 05-08 on serial; git pull for sync retry loop"
+  notes: "M1 raw perception betas on scratch — all 8 subjects; next S1-S4 ingest (B12)"
 
 tracks:
   A:
@@ -110,7 +113,7 @@ milestones:
     blocker: [clip_audit_pending_weights]
   M1_data_ready:
     status: in_progress
-    blocker: [perception_betas_not_synced]
+    blocker: [S1_S4_ingest_not_implemented, mirage_hf_weights_incomplete]
   M2_track_a_gate_pass:
     status: blocked
     blocker: [M0_manifest_frozen, M1_data_ready, track_a_not_vendored]

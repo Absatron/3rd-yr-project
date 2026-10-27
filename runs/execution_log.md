@@ -170,3 +170,9 @@ sbatch --export=SUBJ=02 scripts/csf/sync_m1_perception_subj.sbatch
 **Fix:** Re-submit `sbatch --export=SUBJ=04 …` (idempotent `aws s3 sync`). Repo: `sync_m1_perception_subj.sbatch` adds AWS adaptive retries + up to 3 sync passes.
 
 ---
+
+## 2026-10-27 — M1 perception sync verified (all 8 subjects)
+
+CSF scratch: `betas/subj01`–`subj08` present (~42–62G each). Local file counts match S3 for all subjects; subj03 has 62 extra local files (dual-sync overlap). **M1 download gate passed**; remaining M1 work is S1–S4 + HF weights on scratch.
+
+---
