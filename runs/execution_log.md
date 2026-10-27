@@ -190,4 +190,6 @@ CSF scratch: `betas/subj01`–`subj08` present (~42–62G each). Local file coun
 **Status:** Under review — investigator must approve plan and record **D1–D8** before **`execute-implementation-plan`**.  
 **Note:** Scratch betas are v2 (`betas_fithrf`); plan default **D1** is v3 (`betas_fithrf_GLMdenoise_RR`) + conditional re-sync (T-004b).
 
+**Investigator decisions (2026-10-27):** **D1** = v3 + re-sync all subjects; **D3** = HDF5 + parquet indexes; **D4** = audited exceptions for MIRAGE-aligned imagery training IDs. **Execute:** deferred — review plan file first (`proceed_execute=review_first`).
+
 ---

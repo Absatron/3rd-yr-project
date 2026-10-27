@@ -8,7 +8,13 @@ study:
   execution_plan: docs/workflow_stages/execution_plans/2026-09-10-perception-imagery-latent-ablation-execution-plan.md
   plan_approved_at: "2026-09-10"
   s1_s4_implementation_plan: implementation_plans/2026-10-27-perception-imagery-latent-ablation-s1-s4-ingest-implementation-plan.md
-  s1_s4_implementation_plan_status: under_review
+  s1_s4_implementation_plan_status: approved_pending_plan_read
+  implementation_decisions:
+    recorded_at: "2026-10-27"
+    D1_beta_version: betas_fithrf_GLMdenoise_RR
+    D1_action: resync_all_subjects
+    D3_storage: hdf5_per_subject_plus_parquet_index
+    D4_s3_targets: audited_imagery_exceptions
   manifest_version: "1.0.0"
 
 provenance:

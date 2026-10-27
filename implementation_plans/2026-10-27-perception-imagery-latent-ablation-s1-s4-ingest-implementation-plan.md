@@ -2,7 +2,7 @@
 
 **Date:** 2026-10-27
 **Author:** AI-assisted (implementation-plan subagent)
-**Status:** Under Review — awaiting investigator approval and decisions D1–D8 (§4)
+**Status:** Investigator decisions **D1, D3, D4** recorded 2026-10-27 (see `runs/registry.yaml` → `implementation_decisions`). Remaining defaults D2, D5–D8 per §4. **Execute deferred** until plan read-through complete.
 **Study slug:** `perception-imagery-latent-ablation`
 **Solution design (approved):** `docs/workflow_stages/model_designs/2026-09-06-perception-imagery-latent-ablation-option-3.md` (Option 3, inheriting Option 2 Track B package layout)
 **Execution plan (approved, governs S1–S4 CLIs):** `docs/workflow_stages/execution_plans/2026-09-10-perception-imagery-latent-ablation-execution-plan.md` § *Shared foundation: S1–S4*
