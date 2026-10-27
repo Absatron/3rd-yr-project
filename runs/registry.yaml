@@ -61,13 +61,35 @@ data_access:
         exit_state: COMPLETED
         scratch_size: "61G"
         completed_at: "2026-10-22"
+      - id: "02"
+        slurm_job_id: 23824802
+        exit_state: COMPLETED
+        exit_code: "0:0"
+        scratch_size: "62G"
+        elapsed: "00:45:48"
+        completed_at: "2026-10-26"
+      - id: "03"
+        slurm_job_id: 23827408
+        exit_state: COMPLETED
+        exit_code: "0:0"
+        scratch_size: "~50G"
+        elapsed: "00:22:31"
+        completed_at: "2026-10-26"
+    subjects_failed_partial:
+      - id: "04"
+        slurm_job_id: 23828368
+        exit_state: FAILED
+        exit_code: "1:0"
+        scratch_size: "36G"
+        cause: "AWS_IO_SOCKET_TIMEOUT (CSF→S3); not VPN-related"
+        retry: "re-sbatch SUBJ=04; sync script now retries up to 3 passes"
     partition_policy: serial
-    current_subject: "02"
-    slurm_job_id: 23824802
-    slurm_state: RUNNING
-    submit_command: "sbatch --export=SUBJ=02 scripts/csf/sync_m1_perception_subj.sbatch"
-    cancelled_multicore_jobs: [23816141, 23824709]
-  notes: "M1 sync uses serial partition; subj02 job 23824802; subj03-08 after subj02 COMPLETED"
+    current_subject: "04"
+    slurm_job_id: null
+    slurm_state: null
+    submit_command: "sbatch --export=SUBJ=NN scripts/csf/sync_m1_perception_subj.sbatch"
+    cancelled_multicore_jobs: [23816141, 23824709, 23826369]
+  notes: "subj01-03 complete; subj04 partial — retry 04 then 05-08 on serial; git pull for sync retry loop"
 
 tracks:
   A:

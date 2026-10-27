@@ -4,7 +4,7 @@
 **Slug:** `perception-imagery-latent-ablation`  
 **Model design:** Option 3 (dual-track hybrid)  
 **Started:** 2026-09-10  
-**Overall status:** **IN PROGRESS** — HG-0 signed; M0 complete; M1 perception sync on **`serial`** — subj01 **COMPLETE** (61G); subj02 **RUNNING** (job `23824802`); subj03–08 queued after subj02  
+**Overall status:** **IN PROGRESS** — HG-0 signed; M0 complete; M1 **`serial`** — subj01–03 **COMPLETE**; subj04 **partial** (job `23828368` FAILED, S3 timeout); retry 04 then 05–08  
 **Verdict:** N/A (no training yet)
 
 ---
@@ -52,7 +52,7 @@ Kickoff (2026-09-10) created docs and registry. **2026-10-03–05:** CSF home/sc
 | Milestone | Target stages | Status | Notes |
 | --------- | ------------- | ------ | ----- |
 | **M0** — Manifest frozen | S0 | **COMPLETE** | HG-0 signed 2026-10-22; SHA256 in registry |
-| **M1** — Data ready | S1–S4 | **IN PROGRESS** | subj01 **COMPLETE** (`23630151`, 61G); subj02 job `23816141` **PENDING** (queue Priority; est. start 2026-11-02); subj03–08 queued after subj02; S1–S4 **DEFERRED** (no CLIs) |
+| **M1** — Data ready | S1–S4 | **IN PROGRESS** | subj01–03 perception betas on scratch (`23630151`, `23824802`, `23827408`); subj04–08 manual **serial** sync; S1–S4 **DEFERRED** (no CLIs) |
 | **M2** — Track A gate pass | TA.1–TA.5 | **BLOCKED** | Needs M0, M1, B8 |
 | M3 — Track B ridges fit | S5–S6 | NOT STARTED | — |
 | M4 — Latent cache complete | S7 | NOT STARTED | — |
@@ -178,6 +178,26 @@ ssh -o BatchMode=yes csf3 'du -sh ~/scratch/comp30030-mirage-ablation/data/raw/n
 
 **Policy:** All remaining M1 perception syncs use **`serial`** only. Use **`multicore`** later for S1–S2 ingest / parallel CPU, not for `aws s3 sync`.
 
+### Execute-experiment — M1 subj02 complete, subj03 started — 2026-10-26 (evening)
+
+| Task | Result |
+| ---- | ------ |
+| CSF `git pull` | `498738a` → `d98f7db` (serial sbatch default + docs) |
+| subj02 job `23824802` | **COMPLETED** `0:0`, `00:45:48`, scratch **62G** |
+| subj03 on **`serial`** | **COMPLETED** job `23827408` (`0:0`, ~23 min); scratch **~50G** |
+| Duplicate subj03 job `23826369` | Overlap with agent submit — **`scancel`** if still queued/running |
+| Laptop → CSF SSH | **BLOCKED** ~18:23 UTC — DNS resolution failure; cluster jobs unaffected |
+
+**Remaining:** Submit `SUBJ=04` … `08` sequentially on **`serial`** (investigator manual chain).
+
+### M1 subj04 failed — 2026-10-26 / follow-up 2026-10-27
+
+| Item | Detail |
+| ---- | ------ |
+| Job `23828368` | **FAILED** `1:0`, ~31 min; scratch **36G** (expect ~45–65G) |
+| Cause | `AWS_IO_SOCKET_TIMEOUT` on CSF compute node → S3 (not laptop VPN) |
+| Action | Re-`sbatch --export=SUBJ=04`; `sync_m1_perception_subj.sbatch` updated with retry passes |
+
 ### Kickoff — 2026-09-10
 
 | Task | Result |
@@ -189,7 +209,7 @@ ssh -o BatchMode=yes csf3 'du -sh ~/scratch/comp30030-mirage-ablation/data/raw/n
 
 ## Next tasks (execute-experiment — ordered)
 
-1. **execute-experiment:** When job `23824802` **COMPLETED**, confirm subj02 ~45–65 GB; submit M1 `SUBJ=03`…`08` via **`serial`** sbatch (one at a time). subj01 done (61G, `23630151`).
+1. **Investigator:** M1 `SUBJ=04`…`08` via **`serial`** sbatch (one at a time). subj01–03 done (`23630151`, `23824802`, `23827408`). `scancel 23826369` if duplicate still active.
 2. Resolve B11 — define CLIP checkpoint source (not on `reesekneeland/MIRAGE` HF dataset); then `s0_populate_manifests.py --audit` + `compare_mirage_training_split.py --write-audit`.
 3. Route **execute-implementation-plan** for S1–S4 ingest CLIs (B12); HG-1 after S4.
 4. Vendor `track_a/` + MIRAGE env (B8) after M1 perception betas on scratch for train subjects.

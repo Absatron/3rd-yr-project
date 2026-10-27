@@ -105,6 +105,8 @@ sbatch ~/comp30030-mirage-ablation/scripts/csf/hf_selective_download.sbatch
 
 **Policy:** `scripts/csf/sync_m1_perception_subj.sbatch` defaults to **`serial`**; documented in `docs/CSF/csf-environment.md` and prerequisites. Remaining subjects **03–08** after subj02 completes.
 
+**M1 chaining:** Background execute-experiment run for subj02–08 was **stopped by investigator** (2026-10-26); subj02 Slurm job `23824802` continues on CSF. Submit `SUBJ=03`…`08` manually after each **COMPLETED** (~45–65 min/subject on serial).
+
 ---
 
 ## 2026-10-22 — M1 perception sync started (CSF)
@@ -146,5 +148,25 @@ sbatch --export=SUBJ=02 scripts/csf/sync_m1_perception_subj.sbatch
 **Remaining:** After subj02 completes, submit `SUBJ=03` … `08` sequentially.
 
 **Monitor:** `squeue -j 23816141`; `sacct -j 23816141 -X`; `slurm-m1-subj-23816141.out`; `du -sh ~/scratch/.../betas/subj02`.
+
+---
+
+## 2026-10-26 — M1 perception sync serial chain (CSF)
+
+**Host:** CSF3 via SSH BatchMode; repo pulled `498738a` → `d98f7db`.
+
+**subj02 (job `23824802`):** **COMPLETED** `0:0`, elapsed `00:45:48`, ended `2026-10-26T17:10:08+00:00`. Scratch `betas/subj02` **62G**. Slurm log: `slurm-m1-subj-23824802.out`.
+
+**subj03:** Investigator submit **COMPLETED** — job **`23827408`** (`0:0`, ~23 min, log `subj03 done` 18:04 UTC). Scratch **~50G**. Overlapping job **`23826369`** (background agent, 17:12) — **`scancel 23826369`** if still in `squeue`.
+
+**Next:** `sbatch --export=SUBJ=04` … `08` on CSF after each **COMPLETED** (manual chain; background [M1 serial sync](b6ab2953-9e5d-4b13-b5d1-9b8c14af2d55) stopped by investigator).
+
+---
+
+## 2026-10-27 — M1 subj04 sync failed (retry)
+
+**Job `23828368`:** **FAILED** `1:0` (~31 min). Log: `AWS_IO_SOCKET_TIMEOUT` on last ~30 files (~43 GiB transferred). Scratch **36G** (incomplete). Runs on CSF compute node — **not** caused by laptop VPN drop.
+
+**Fix:** Re-submit `sbatch --export=SUBJ=04 …` (idempotent `aws s3 sync`). Repo: `sync_m1_perception_subj.sbatch` adds AWS adaptive retries + up to 3 sync passes.
 
 ---

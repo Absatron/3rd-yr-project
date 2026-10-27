@@ -121,6 +121,7 @@ Smoke-tested 2026-10-21: `scripts/csf/slurm_smoke.sbatch` job `23495544` (serial
 | **Submit** | One subject at a time: `sbatch --export=SUBJ=02 scripts/csf/sync_m1_perception_subj.sbatch` (repeat `03`…`08`) |
 | **Runtime** | ~7–15 minutes active sync per subject once the job is **RUNNING** (subj01 serial-equivalent: ~7m on multicore when queue was short) |
 | **Monitor** | `squeue -u $USER`; `sacct -j JOBID -X`; `tail slurm-m1-subj-JOBID.out`; `du -sh ~/scratch/.../data/raw/nsd/betas/subjNN` |
+| **Transient failures** | `AWS_IO_SOCKET_TIMEOUT` near end of sync → job **FAILED** with partial scratch; **re-sbatch same SUBJ** (sync resumes). Script retries up to 3 passes with adaptive AWS retries. |
 | **Queue diagnosis** | `scontrol show job JOBID` → `Reason=` and `StartTime=` (estimated). `Reason=Priority` on `multicore` ≠ script failure |
 
 **Later stages** still use **`multicore`**, **high-memory**, or **GPU** partitions for ingest, ridge, and diffusion (see execution plan § CSF3).
