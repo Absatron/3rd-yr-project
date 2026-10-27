@@ -85,7 +85,9 @@ data_access:
       "06": 55
       "07": 52
       "08": 42
-    s3_file_count_parity: "8/8 subjects match S3 object counts except subj03 (+62 extra local files, harmless)"
+    subj03_resync_job_id: 23855894
+    subj03_resync_at: "2026-10-27"
+    s3_file_count_parity: "8/8 subjects; subj03 re-synced with --delete (dryrun 0 deltas)"
     partition_policy: serial
     current_subject: null
     slurm_job_id: null

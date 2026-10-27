@@ -176,3 +176,10 @@ sbatch --export=SUBJ=02 scripts/csf/sync_m1_perception_subj.sbatch
 CSF scratch: `betas/subj01`–`subj08` present (~42–62G each). Local file counts match S3 for all subjects; subj03 has 62 extra local files (dual-sync overlap). **M1 download gate passed**; remaining M1 work is S1–S4 + HF weights on scratch.
 
 ---
+
+## 2026-10-27 — subj03 perception betas reconciled to S3
+
+**Cause:** overlapping serial sync jobs left ~62 extra local files under `betas_fithrf/`.  
+**Fix:** `sync_m1_perception_subj.sbatch` now passes `aws s3 sync --delete`; re-ran `sbatch --export=SUBJ=03` (job **`23855894`**, COMPLETED ~20s). Post-check: `aws s3 sync --dryrun --delete` reports **0** deltas for subj03.
+
+---
