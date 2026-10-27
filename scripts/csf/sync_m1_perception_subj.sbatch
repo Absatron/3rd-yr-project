@@ -36,7 +36,7 @@ SYNC_EXCLUDES=(
 max_passes=3
 for pass in $(seq 1 "${max_passes}"); do
   echo "aws s3 sync pass ${pass}/${max_passes} subj${SUBJ} $(date -Is)"
-  if aws s3 sync --no-sign-request "${S3_SRC}" "${S3_DST}" "${SYNC_EXCLUDES[@]}"; then
+  if aws s3 sync --delete --no-sign-request "${S3_SRC}" "${S3_DST}" "${SYNC_EXCLUDES[@]}"; then
     break
   fi
   if [[ "${pass}" -eq "${max_passes}" ]]; then
