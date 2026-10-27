@@ -183,3 +183,11 @@ CSF scratch: `betas/subj01`–`subj08` present (~42–62G each). Local file coun
 **Fix:** `sync_m1_perception_subj.sbatch` now passes `aws s3 sync --delete`; re-ran `sbatch --export=SUBJ=03` (job **`23855894`**, COMPLETED ~20s). Post-check: `aws s3 sync --dryrun --delete` reports **0** deltas for subj03.
 
 ---
+
+## 2026-10-27 — S1–S4 implementation plan drafted (B12)
+
+**Artifact:** `implementation_plans/2026-10-27-perception-imagery-latent-ablation-s1-s4-ingest-implementation-plan.md` ([implementation-plan](17e4fcaf-b375-46c8-b156-20861d4f022b)).  
+**Status:** Under review — investigator must approve plan and record **D1–D8** before **`execute-implementation-plan`**.  
+**Note:** Scratch betas are v2 (`betas_fithrf`); plan default **D1** is v3 (`betas_fithrf_GLMdenoise_RR`) + conditional re-sync (T-004b).
+
+---

@@ -43,7 +43,7 @@ Kickoff (2026-09-10) created docs and registry. **2026-10-03–05:** CSF home/sc
 | ~~B9~~ | ~~Slurm smoke not recorded~~ | — | **Resolved 2026-10-21** — job `23495544` |
 | ~~B10~~ | ~~M0 scratch sync in progress~~ | — | **Resolved 2026-10-21** — log `2026-10-21T16:15:38+01:00`; ~12G `data/raw` |
 | **B11** | CLIP semantic audit `pending_weights` | S0.2 incomplete | HF selective job delivered captions only; no `*clip*` paths on `reesekneeland/MIRAGE` dataset — need CLIP source per plan |
-| **B12** | S1–S4 ingest CLIs not implemented | M1 ingest blocked | `mirage_ablation/ingest/` stub only — route `execute-implementation-plan` |
+| **B12** | S1–S4 ingest CLIs not implemented | M1 ingest code blocked | **Plan ready 2026-10-27:** `implementation_plans/2026-10-27-perception-imagery-latent-ablation-s1-s4-ingest-implementation-plan.md` — approve D1–D8, then route `execute-implementation-plan` |
 
 ---
 
@@ -52,7 +52,7 @@ Kickoff (2026-09-10) created docs and registry. **2026-10-03–05:** CSF home/sc
 | Milestone | Target stages | Status | Notes |
 | --------- | ------------- | ------ | ----- |
 | **M0** — Manifest frozen | S0 | **COMPLETE** | HG-0 signed 2026-10-22; SHA256 in registry |
-| **M1** — Data ready | S1–S4 | **IN PROGRESS** | subj01–03 perception betas on scratch (`23630151`, `23824802`, `23827408`); subj04–08 manual **serial** sync; S1–S4 **DEFERRED** (no CLIs) |
+| **M1** — Data ready | S1–S4 | **IN PROGRESS** | Perception betas subj01–08 on scratch (v2 `betas_fithrf`; D1 may require v3 re-sync); S1–S4 **implementation plan drafted**, code not built |
 | **M2** — Track A gate pass | TA.1–TA.5 | **BLOCKED** | Needs M0, M1, B8 |
 | M3 — Track B ridges fit | S5–S6 | NOT STARTED | — |
 | M4 — Latent cache complete | S7 | NOT STARTED | — |
@@ -207,13 +207,13 @@ ssh -o BatchMode=yes csf3 'du -sh ~/scratch/comp30030-mirage-ablation/data/raw/n
 
 ---
 
-## Next tasks (execute-experiment — ordered)
+## Next tasks (ordered)
 
-1. **Investigator:** M1 `SUBJ=04`…`08` via **`serial`** sbatch (one at a time). subj01–03 done (`23630151`, `23824802`, `23827408`). `scancel 23826369` if duplicate still active.
-2. Resolve B11 — define CLIP checkpoint source (not on `reesekneeland/MIRAGE` HF dataset); then `s0_populate_manifests.py --audit` + `compare_mirage_training_split.py --write-audit`.
-3. Route **execute-implementation-plan** for S1–S4 ingest CLIs (B12); HG-1 after S4.
-4. Vendor `track_a/` + MIRAGE env (B8) after M1 perception betas on scratch for train subjects.
-5. Do **not** start Track A GPU until M1 perception sync complete for required subjects.
+1. **Investigator:** Approve `implementation_plans/2026-10-27-perception-imagery-latent-ablation-s1-s4-ingest-implementation-plan.md` and record decisions **D1–D8** (especially **D1** beta version, **D3** storage layout, **D4** S3 target exceptions).
+2. Route **`execute-implementation-plan`** on that document (B12); production S1 runs blocked until **D1** is recorded.
+3. Resolve B11 — CLIP checkpoint source; unblocks Setting B (D8) and leakage items L3/L7 at HG-1.
+4. Vendor `track_a/` + MIRAGE env (B8); align with S3 submodule pins (D7).
+5. After S4 on scratch: HG-1 leakage checklist, then Track A gate (M2) when B8 ready.
 
 ---
 
