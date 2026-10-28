@@ -145,44 +145,9 @@ def _read_mat_structure(path: Path) -> dict[str, Any]:
 
 
 def _design_trial_count(design_dir: Path) -> int | None:
-    """Total GLMsingle beta maps implied by per-run design matrices (T-005)."""
-    labels = (
-        "visA_dm",
-        "visB_dm",
-        "visC_dm",
-        "imgA_1_dm",
-        "imgA_2_dm",
-        "imgB_1_dm",
-        "imgB_2_dm",
-        "imgC_1_dm",
-        "imgC_2_dm",
-        "attA_dm",
-        "attB_dm",
-        "attC_dm",
-    )
-    total = 0
-    found = False
-    for label in labels:
-        path = design_dir / f"{label}.mat"
-        if not path.is_file():
-            continue
-        try:
-            data = loadmat(path, simplify_cells=True)
-        except NotImplementedError:
-            with h5py.File(path, "r") as f:
-                if "dm" not in f:
-                    continue
-                dm = np.asarray(f["dm"])
-        else:
-            if "dm" not in data:
-                continue
-            dm = np.asarray(data["dm"])
-        if dm.ndim != 2:
-            continue
-        found = True
-        # NSD-Imagery dm rows are TRs; each 60 TRs yield one beta per condition column.
-        total += (dm.shape[0] * dm.shape[1]) // 60
-    return total if found else None
+    from mirage_ablation.ingest.imagery_design import design_trial_count
+
+    return design_trial_count(design_dir)
 
 
 def run_format_probe(subject: int, beta_version: str) -> dict[str, Any]:

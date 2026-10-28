@@ -287,3 +287,21 @@ CSF scratch: `betas/subj01`–`subj08` present (~42–62G each). Local file coun
 **IP-2:** not started.
 
 ---
+
+## 2026-10-28 — IP-2 S1 ingest code (execute-implementation-plan)
+
+**Scope:** T-010, T-011, T-012, T-013, T-015 (+ T-014 jobscript scaffold only; **no** production `s1_ingest.sbatch` for all 8 subjects).
+
+**Laptop verification:** `python3 -m pytest tests/unit -q` → **20 passed, 1 skipped** (after `pyarrow==17.0.0` install locally).
+
+**Deliverables:** `mirage_ablation/ingest/{nsd_trials,imagery_trials,imagery_design,betas,s1_run,mat_io}.py`, extended `cli.py` + `__main__.py`, `scripts/csf/s1_ingest.sbatch`, unit tests + `tests/integration/test_s1_real_data.py`.
+
+**720 imagery rows:** `build_imagery_trials` + `design_trial_count` aligned with IP-1 probe (`voxel_order` [2,1,0] in `betas.py`); attention runs with zero-row design matrices contribute no beta rows (vis+img = 720).
+
+**T-004b:** Job **23913251** **COMPLETED** `0:0` (~24:09) — subj01 v3 smoke sync only; full 8-subject v3 re-sync + v3 format probe still required before T-014 production.
+
+**T-014 blockers:** D1 v3 on all subjects; re-run format probe on v3; CSF `pytest -m csf_data tests/integration/test_s1_real_data.py` after **git push** + CSF `git pull`.
+
+**Uncommitted:** IP-2 code on laptop — commit/push before CSF integration.
+
+---

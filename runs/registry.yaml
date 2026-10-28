@@ -8,7 +8,7 @@ study:
   execution_plan: docs/workflow_stages/execution_plans/2026-09-10-perception-imagery-latent-ablation-execution-plan.md
   plan_approved_at: "2026-09-10"
   s1_s4_implementation_plan: implementation_plans/2026-10-27-perception-imagery-latent-ablation-s1-s4-ingest-implementation-plan.md
-  s1_s4_implementation_plan_status: executing_ip2
+  s1_s4_implementation_plan_status: ip2_s1_code_complete_pending_csf
   ip1_git_commit: "3a09787"
   ip1_csf_blockers: []
   ip1_format_probe:
@@ -63,9 +63,12 @@ study:
       note: "OOM on serial; probe logic fix (int16 axis parity, design trial sum); format_probe validation_pass true"
     v3_resync_smoke_subj01:
       job_id: 23913251
-      state_note: "RUNNING at 2026-10-28 resubmit handoff"
+      state: COMPLETED
+      exit_code: "0:0"
+      elapsed: "00:24:09"
       beta_version: betas_fithrf_GLMdenoise_RR
       submitted_at: "2026-10-28"
+      note: "subj01 smoke sync; v3 format probe still required before production S1"
   implementation_decisions:
     recorded_at: "2026-10-27"
     D1_beta_version: betas_fithrf_GLMdenoise_RR
@@ -155,7 +158,7 @@ data_access:
     s3_file_count_parity: "8/8 subjects; subj03 re-synced with --delete (dryrun 0 deltas)"
     beta_version_on_scratch: betas_fithrf
     beta_version_production_d1: betas_fithrf_GLMdenoise_RR
-    v3_resync_status: subj01_smoke_job_23913251
+    v3_resync_status: subj01_smoke_completed_23913251
     v3_resync_scripts_at: "2026-10-28"
     partition_policy: serial
     current_subject: null

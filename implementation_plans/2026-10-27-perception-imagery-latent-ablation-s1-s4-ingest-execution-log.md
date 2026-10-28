@@ -248,8 +248,45 @@ Monitor: `sacct -j <JOBID> --format=JobID,State,ExitCode,Elapsed,MaxRSS`
 
 ---
 
-## Summary
+## 2026-10-28 — Milestone IP-2 S1 Ingest (code + laptop tests)
 
-- **Tasks completed:** T-002, T-003, T-004 PASS; T-001, T-005, T-050 PASS on CSF; T-004b PARTIAL (smoke job separate)
-- **Milestone IP-1 exit criteria:** **MET** (env, pytest, `format_probe.json` all criteria)
-- **Recommendation:** **COMPLETE (pending git commit/push of probe + s1_probe + lock)** — then `post-implementation-review`; do **not** start T-010+ until investigator commits
+### T-010 NSD perception trials — PASS (laptop)
+- **Verification:** `tests/unit/test_nsd_trials.py` (3 tests)
+
+### T-011 Imagery trials (720 rows) — PASS (laptop)
+- **Verification:** `tests/unit/test_imagery_trials.py`; `design_trial_count` = 720 on production-shaped fixtures
+
+### T-012 Mask/beta reader — PASS (laptop)
+- **Verification:** `tests/unit/test_betas_reader.py`
+
+### T-013 S1 CLI/writer — PASS (laptop)
+- **Verification:** `tests/unit/test_ingest_cli_s1.py` (smoke path, overwrite guard, atomic write)
+
+### T-014 S1 production jobscript — BLOCKED (scaffold only)
+- **Deliverable:** `scripts/csf/s1_ingest.sbatch` (array 1–8, `BETA_VERSION` from env)
+- **Not run:** production sbatch per investigator gate (T-004b all subjects + v3 format probe)
+
+### T-015 CSF integration — PARTIAL
+- **Deliverable:** `tests/integration/test_s1_real_data.py` (`@pytest.mark.csf_data`)
+- **Pending:** git push + CSF `git pull`; `pytest_track_b.sbatch` with `PYTEST_ARGS="-m csf_data tests/integration/test_s1_real_data.py"`
+
+### T-004b note
+- Job **23913251** COMPLETED (subj01 v3 smoke); full v3 re-sync + v3 probe still open.
+
+### Milestone IP-2 status: **BLOCKED for T-014 production** / **code COMPLETE on laptop**
+
+| Blocker | Resolution |
+|---------|------------|
+| v3 betas all 8 subjects | Continue T-004b per-subject sync |
+| v3 format probe | Re-run `s1_probe.sbatch` with `BETA_VERSION=betas_fithrf_GLMdenoise_RR` after v3 on scratch |
+| CSF integration T-015 | Push IP-2 commit; run csf_data pytest |
+
+**Recommendation:** `post-implementation-review` for IP-2 code scope after CSF T-015 PASS; do **not** start IP-3 (S2).
+
+---
+
+## Summary (IP-1 + IP-2)
+
+- **IP-1:** COMPLETE on CSF
+- **IP-2 code tasks T-010–T-013, T-015 (file):** PASS laptop; T-014 scaffold only; production ingest **BLOCKED**
+- **Next:** commit/push → CSF integration → v3 data gate → T-014 sbatch
