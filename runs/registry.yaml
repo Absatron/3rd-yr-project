@@ -9,7 +9,7 @@ study:
   plan_approved_at: "2026-09-10"
   s1_s4_implementation_plan: implementation_plans/2026-10-27-perception-imagery-latent-ablation-s1-s4-ingest-implementation-plan.md
   s1_s4_implementation_plan_status: ip1_foundation_complete
-  ip1_git_commit: pending_after_commit
+  ip1_git_commit: "3a09787"
   ip1_csf_blockers: []
   ip1_format_probe:
     path: runs/format_probe_subj01_betas_fithrf.json
