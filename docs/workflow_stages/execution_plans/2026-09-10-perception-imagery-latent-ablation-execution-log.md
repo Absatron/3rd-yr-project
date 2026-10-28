@@ -4,7 +4,7 @@
 **Slug:** `perception-imagery-latent-ablation`  
 **Model design:** Option 3 (dual-track hybrid)  
 **Started:** 2026-09-10  
-**Overall status:** **IN PROGRESS** — HG-0 signed; M0 complete; M1 **`serial`** — subj01–03 **COMPLETE**; subj04 **partial** (job `23828368` FAILED, S3 timeout); retry 04 then 05–08  
+**Overall status:** **IN PROGRESS** — HG-0 signed; M0 complete; M1 v2 perception betas on scratch (all 8 subjects); **D1:** v3 re-sync via implementation **T-004b**; S1–S4 implementation plan approved pending execute (**IP-1**)  
 **Verdict:** N/A (no training yet)
 
 ---

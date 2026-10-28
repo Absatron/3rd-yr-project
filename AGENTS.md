@@ -2,9 +2,27 @@
 
 **Study slug:** `perception-imagery-latent-ablation`  
 **Approved execution plan:** `docs/workflow_stages/execution_plans/2026-09-10-perception-imagery-latent-ablation-execution-plan.md`  
-**Live status:** `docs/workflow_stages/execution_plans/2026-09-10-perception-imagery-latent-ablation-execution-log.md` · `runs/registry.yaml`
+**Live status:** `docs/workflow_stages/execution_plans/2026-09-10-perception-imagery-latent-ablation-execution-log.md` · `runs/registry.yaml`  
+**Implementation (S1–S4):** `implementation_plans/2026-10-27-perception-imagery-latent-ablation-s1-s4-ingest-implementation-plan.md` · decisions in `runs/registry.yaml` → `implementation_decisions`
 
-## Who should read what
+## Living documentation (every agent turn)
+
+When **any** of the following change — investigator decision (D1–D8), milestone, blocker, CSF job batch, or beta/data path — the **active agent** must update docs in the same session (before delegating to subagents that read them):
+
+| Priority | File | Role |
+|----------|------|------|
+| 1 | `runs/registry.yaml` | Source of truth: decisions, job IDs, blockers, scratch paths |
+| 2 | `runs/execution_log.md` | Dated narrative on the laptop/repo |
+| 3 | `docs/workflow_stages/execution_plans/*-execution-log.md` | Study execution log (milestones, next tasks) |
+| 4 | `docs/execution/data-and-compute-prerequisites.md` | S3 paths, beta version, tier sizes |
+| 5 | `docs/CSF/csf-environment.md` | Slurm/sync commands aligned with registry |
+| 6 | `scripts/csf/*.sbatch` | When sync targets or env vars change |
+
+**Before** routing `execute-implementation-plan`, `execute-experiment`, or `reproducibility-investigator`: read `runs/registry.yaml` and confirm listed paths/decisions match the docs above.
+
+**After** a large implementation milestone: optionally route **`documentation-reconciliation`** or **`provenance-reconciliation`** for a full sweep; that does not replace incremental updates at decision time.
+
+**Do not** edit frozen upstream science (`hypothesis_formulation/`, `experimental_strategies/`, approved execution plan prose) to record operational choices — use registry + execution logs + implementation execution log instead.
 
 | Agent / skill | Primary docs |
 |---------------|--------------|
@@ -46,7 +64,7 @@ Heavy work runs on **CSF3 Slurm**, not the laptop. **`docs/CSF/ssh-access.md`** 
 ## Gating (do not skip)
 
 - **M0 / HG-0:** Manifest frozen before training.
-- **M1 (S1–S4):** NSD + NSD-Imagery on scratch before ridge or Track A training. Perception beta S3 sync: `scripts/csf/sync_m1_perception_subj.sbatch` on **`serial`**, one `SUBJ` at a time (`docs/CSF/csf-environment.md`).
+- **M1 (S1–S4):** Raw NSD on scratch must match **D1** in registry (`betas_fithrf_GLMdenoise_RR` for production). Legacy v2 `betas_fithrf` sync is complete but superseded — v3 re-sync is **implementation plan T-004b** (parallel with IP-1; required before production S1). Perception sync: `scripts/csf/sync_m1_perception_subj.sbatch` on **`serial`**, one `SUBJ` at a time (`docs/CSF/csf-environment.md`).
 - **M2 / HG-2:** Track A S12 PASS before Track B ablation **reporting**.
 
 See execution log **Active blockers** before starting GPU stages.

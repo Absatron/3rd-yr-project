@@ -1,5 +1,7 @@
 #!/bin/bash --login
 # M1 Tier-3: sync one subject's NSD perception betas to scratch (large I/O).
+# Production path (D1): betas_fithrf_GLMdenoise_RR — parameterize via T-004b (implementation plan).
+# Legacy script target: betas_fithrf (v2 on scratch until v3 re-sync).
 # Usage: sbatch --export=SUBJ=01 sync_m1_perception_subj.sbatch
 
 # I/O-bound S3 sync; serial queue starts much faster than multicore on CSF3.

@@ -190,6 +190,12 @@ CSF scratch: `betas/subj01`–`subj08` present (~42–62G each). Local file coun
 **Status:** Under review — investigator must approve plan and record **D1–D8** before **`execute-implementation-plan`**.  
 **Note:** Scratch betas are v2 (`betas_fithrf`); plan default **D1** is v3 (`betas_fithrf_GLMdenoise_RR`) + conditional re-sync (T-004b).
 
-**Investigator decisions (2026-10-27):** **D1** = v3 + re-sync all subjects; **D3** = HDF5 + parquet indexes; **D4** = audited exceptions for MIRAGE-aligned imagery training IDs. **Execute:** deferred — review plan file first (`proceed_execute=review_first`).
+**Investigator decisions (2026-10-27):** **D1** = v3 + re-sync all subjects; **D3** = HDF5 + parquet indexes; **D4** = audited exceptions for MIRAGE-aligned imagery training IDs. **Execute:** deferred until plan read-through — then **IP-1** (`execute-implementation-plan`).
+
+---
+
+## 2026-10-28 — Living doc reconciliation (D1, M1, B12)
+
+Aligned `AGENTS.md` (living-doc rule), `data-and-compute-prerequisites.md`, `csf-environment.md`, and workflow execution log header with `runs/registry.yaml`: v2 betas on scratch; production **v3**; v3 re-sync = **T-004b** inside implementation plan (not a pre-requisite to start IP-1).
 
 ---

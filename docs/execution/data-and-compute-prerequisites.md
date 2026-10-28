@@ -2,7 +2,7 @@
 
 **Study:** Perception-to-Imagery Latent-Target Ablation (Option 3 — Dual-Track Hybrid)  
 **Date:** 2026-09-10  
-**Status:** CSF bootstrap complete (2026-10-05); NSD DUA confirmed (2026-10-21); scratch sync + S0 not started  
+**Status:** CSF bootstrap complete; HG-0 signed (2026-10-22); M0 on scratch (~12G); M1 **v2 perception betas** on scratch for all 8 subjects (2026-10-27). **Investigator D1 (2026-10-27):** production uses **v3** `betas_fithrf_GLMdenoise_RR` — v3 re-sync pending (**T-004b** in S1–S4 implementation plan). S1–S4 code not built (B12).
 **Execution plan:** `docs/workflow_stages/execution_plans/2026-09-10-perception-imagery-latent-ablation-execution-plan.md`
 
 This document clarifies what must be downloaded, from where, and what compute is required **before** GPU training or large Hugging Face syncs. It addresses the common confusion between the MIRAGE README's ~300 GB Hugging Face bundle and the actual NSD/NSD-Imagery neuroimaging requirements for this study.
@@ -25,13 +25,14 @@ This study depends on **two independent data sources**. Neither replaces the oth
 
 **NSD core (perception training):**
 
-- GLMsingle v3 betas at 1.8 mm in `nsdgeneral` mask (beta version 2: `betas_fithrf`)
-- Session/run manifests for subjects 1–8
-- Stimulus metadata (COCO image IDs, `shared1000` lists)
+- GLMsingle betas at 1.8 mm in `nsdgeneral` mask — **production (D1, 2026-10-27):** **`betas_fithrf_GLMdenoise_RR`** (NSD “beta version 3”; MIRAGE + NSD-Imagery benchmark default)
+- **Legacy on CSF scratch:** `betas_fithrf` (v2) for all 8 subjects (~420 GB) from early M1 sync — keep until v3 verified, then delete to free space
+- Session/run manifests for subjects 1–8; stimulus metadata (COCO image IDs, `shared1000` lists)
 
 **NSD-Imagery (OOD test):**
 
-- Dedicated imagery-session betas for all 8 subjects
+- Imagery-session betas for all 8 subjects — **production (D1):** `nsdimagerybetas_fithrf_GLMdenoise_RR`
+- **Legacy on scratch:** `nsdimagerybetas_fithrf` (M0 sync)
 - 18 imagery stimuli + 12 vision stimuli (vision runs supplementary only)
 - Separate data-access acknowledgement via [naturalscenesdataset.org](https://naturalscenesdataset.org/)
 
@@ -39,8 +40,9 @@ This study depends on **two independent data sources**. Neither replaces the oth
 
 - 1 mm functional preparations (`func1mm`)
 - MNI-space versions
-- Beta version 1 (`betas_assumehrf`) or version 3 (`betas_fithrf_GLMdenoise_RR`)
-- Raw NIfTI beta archives when `.npy` or HDF5 preparations exist
+- Beta version 1 (`betas_assumehrf`) only
+- **`betas_fithrf` (v2) for production** after D1 — v2 remains useful for short IP-1 format smokes only
+- Raw NIfTI beta archives when HDF5 preparations exist
 - Full raw timeseries (unless debugging eyetracking)
 
 The NSD manual (received after form approval) is authoritative for exact file paths. The AWS CLI example below follows the [official NSD access page](https://cvnlab.slite.page/p/dC~rBTjqjb/How-to-get-the-data).
@@ -51,7 +53,7 @@ NSD-Imagery is **not** a second S3 bucket or a hidden form. It lives inside the 
 
 | Content | S3 prefix |
 | ------- | --------- |
-| **Imagery-session GLMsingle betas** (all 8 subjects) | `nsddata_betas/ppdata/subj{01..08}/func1pt8mm/nsdimagerybetas_fithrf/` |
+| **Imagery-session GLMsingle betas** (all 8 subjects) | `nsddata_betas/ppdata/subj{01..08}/func1pt8mm/nsdimagerybetas_fithrf_GLMdenoise_RR/` (production); legacy `nsdimagerybetas_fithrf/` on scratch |
 | Stimulus metadata, design matrices, cue lists | `nsddata/experiments/nsdimagery/` |
 | Raw target images (simple/complex sets) | `nsddata/experiments/nsdimagery/rawtargetimages/` |
 
@@ -84,11 +86,11 @@ Agents and scripts in this project should prepend `$HOME/.local/bin` to `PATH` w
 
 | Dataset slice | Approx. size (8 subjects) | Fits 68 GB? |
 | ------------- | ------------------------- | ----------- |
-| NSD-Imagery betas (`nsdimagerybetas_fithrf/`) | ~12 GB | **Yes** |
+| NSD-Imagery betas (v3 path) | ~12 GB | **Yes** |
 | NSD experiment manifests + ROI masks (`nsddata/experiments/nsd`, `nsddata/ppdata/*/func1pt8mm/roi/`) | $<$1 GB | **Yes** |
 | NSD-Imagery metadata (`nsddata/experiments/nsdimagery/`) | $<$50 MB | **Yes** |
 | MIRAGE HF weights (selective) | ~20–30 GB | **Tight** |
-| **NSD core perception betas** (`betas_fithrf/`, all sessions, all 8 subjects) | **~400–520 GB** | **No** |
+| **NSD core perception betas (v3 `betas_fithrf_GLMdenoise_RR/`, 8 subjects)** | **~400–520 GB** | **No** (CSF scratch) |
 
 **Implication:** this laptop cannot hold the full NSD perception training set alongside model weights. Options:
 
@@ -180,7 +182,7 @@ Inspect repo file trees on Hugging Face before syncing; pin exact filenames in `
 
 **Estimated download (M1):** ~50–120 GB (dominated by NSD betas for 8 subjects + encoder weights; **not** the full 300 GB HF bundle).
 
-**Perception betas on CSF (Tier 3):** Submit `scripts/csf/sync_m1_perception_subj.sbatch` **once per subject** (`SUBJ=01`…`08`) on the **`serial`** partition (default in the jobscript). This is S3 I/O only; **`multicore` queue wait can be multi-day** when the cluster is busy. See `docs/CSF/csf-environment.md` § M1 perception beta sync.
+**Perception betas on CSF:** v2 sync **complete** for subj01–08 (see `runs/registry.yaml` → `m1_perception_sync`). **v3 re-sync** is task **T-004b** in the S1–S4 implementation plan (update `sync_m1_perception_subj.sbatch` with `BETA_VERSION`, then `sbatch --export=SUBJ=NN` on **`serial`**, one subject at a time — same manual pattern as M1). Can run **in parallel with IP-1** code work; **must finish before production S1 (T-014)** on all subjects.
 
 **Blocks:** HG-1 (leakage checklist) → unblocks S5 ridge training and Track A.
 
@@ -322,35 +324,29 @@ for s in 01 02 03 04 05 06 07 08; do
 done
 ```
 
-**Tier 2 — NSD-Imagery betas (~12 GB; fits laptop):**
+**Tier 2 — NSD-Imagery betas (~12 GB; fits laptop; use v3 path for production):**
 
 ```bash
 for s in 01 02 03 04 05 06 07 08; do
   aws s3 sync --dryrun --no-sign-request \
-    s3://natural-scenes-dataset/nsddata_betas/ppdata/subj${s}/func1pt8mm/nsdimagerybetas_fithrf/ \
-    "$PROJECT/data/raw/nsd_imagery/betas/subj${s}/func1pt8mm/nsdimagerybetas_fithrf/"
+    s3://natural-scenes-dataset/nsddata_betas/ppdata/subj${s}/func1pt8mm/nsdimagerybetas_fithrf_GLMdenoise_RR/ \
+    "$PROJECT/data/raw/nsd_imagery/betas/subj${s}/func1pt8mm/nsdimagerybetas_fithrf_GLMdenoise_RR/"
 done
 ```
 
-**Tier 3 — NSD core perception betas (~400–520 GB; requires external drive or HPC):**
+**Tier 3 — NSD core perception betas (~400–520 GB; CSF scratch or external drive):**
+
+Use **`betas_fithrf_GLMdenoise_RR/`** per subject (not the whole `ppdata/` tree with excludes). On CSF, prefer `scripts/csf/sync_m1_perception_subj.sbatch` once parameterized (T-004b). Example dry-run for one subject:
 
 ```bash
-# Point NSD_DATA to external volume, NOT laptop root
-NSD_DATA="/Volumes/YourExternalDrive/nsd"
+NSD_DATA="/Volumes/YourExternalDrive/nsd"   # or CSF scratch path
 
 aws s3 sync --dryrun --no-sign-request \
-  s3://natural-scenes-dataset/nsddata_betas/ppdata/ \
-  "$NSD_DATA/nsddata_betas/ppdata/" \
-  --exclude "*func1mm*" \
-  --exclude "*MNI*" \
-  --exclude "*betas_assumehrf*" \
-  --exclude "*betas_fithrf_GLMdenoise_RR*" \
-  --exclude "*nsdimagery*" \
-  --exclude "*nsdsynthetic*" \
-  --exclude "*resting*"
+  s3://natural-scenes-dataset/nsddata_betas/ppdata/subj01/func1pt8mm/betas_fithrf_GLMdenoise_RR/ \
+  "$NSD_DATA/nsddata_betas/ppdata/subj01/func1pt8mm/betas_fithrf_GLMdenoise_RR/"
 ```
 
-Prefer `betas_nsdimagery.hdf5` (HDF5) over `.nii.gz` for imagery; for core NSD, confirm beta version (`betas_fithrf` vs `betas_fithrf_GLMdenoise_RR`) against MIRAGE Track A notebooks before bulk sync.
+Prefer `betas_nsdimagery.hdf5` (HDF5) over `.nii.gz` for imagery. **Authoritative beta version:** `runs/registry.yaml` → `implementation_decisions.D1_beta_version`.
 
 - [ ] **1.1** Execute dry-run commands; verify subject count and beta version
 - [ ] **1.2** Remove `--dryrun`; sync to `data/raw/nsd/` and `data/raw/nsd_imagery/`

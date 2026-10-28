@@ -8,7 +8,7 @@ study:
   execution_plan: docs/workflow_stages/execution_plans/2026-09-10-perception-imagery-latent-ablation-execution-plan.md
   plan_approved_at: "2026-09-10"
   s1_s4_implementation_plan: implementation_plans/2026-10-27-perception-imagery-latent-ablation-s1-s4-ingest-implementation-plan.md
-  s1_s4_implementation_plan_status: approved_pending_plan_read
+  s1_s4_implementation_plan_status: approved_pending_execute
   implementation_decisions:
     recorded_at: "2026-10-27"
     D1_beta_version: betas_fithrf_GLMdenoise_RR
@@ -96,6 +96,9 @@ data_access:
     subj03_resync_job_id: 23855894
     subj03_resync_at: "2026-10-27"
     s3_file_count_parity: "8/8 subjects; subj03 re-synced with --delete (dryrun 0 deltas)"
+    beta_version_on_scratch: betas_fithrf
+    beta_version_production_d1: betas_fithrf_GLMdenoise_RR
+    v3_resync_status: pending_T-004b
     partition_policy: serial
     current_subject: null
     slurm_job_id: null

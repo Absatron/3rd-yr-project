@@ -115,11 +115,13 @@ Smoke-tested 2026-10-21: `scripts/csf/slurm_smoke.sbatch` job `23495544` (serial
 
 | Topic | Detail |
 |-------|--------|
-| **Workload** | `aws s3 sync` of one subject’s NSD `betas_fithrf` (~45–65 GB) — **I/O-bound**, not multi-core compute |
+| **Production beta (D1)** | `betas_fithrf_GLMdenoise_RR/` — script update pending **T-004b**; currently still points at legacy **`betas_fithrf/`** |
+| **Legacy on scratch** | v2 sync **complete** subj01–08 (~42–62 GB/subj); see `runs/registry.yaml` |
+| **Workload** | `aws s3 sync --delete` of one subject’s perception betas (~45–65 GB) — **I/O-bound** |
 | **Partition** | **`serial`** (`#SBATCH -p serial`, 1 CPU). Do **not** use `multicore` for this script |
-| **Why not multicore** | On CSF3 (2026-10-26), `multicore` jobs with 2 CPUs sat **PENDING (Priority)** for hours with Slurm **estimated start ~4 days** ahead; identical work on **`serial` started within ~1 minute** |
-| **Submit** | One subject at a time: `sbatch --export=SUBJ=02 scripts/csf/sync_m1_perception_subj.sbatch` (repeat `03`…`08`) |
-| **Runtime** | ~7–15 minutes active sync per subject once the job is **RUNNING** (subj01 serial-equivalent: ~7m on multicore when queue was short) |
+| **Submit** | One subject at a time: `sbatch --export=SUBJ=02 scripts/csf/sync_m1_perception_subj.sbatch` (repeat `03`…`08`; v3 re-sync repeats `01`…`08` after T-004b) |
+| **Why not multicore** | On CSF3 (2026-10-26), `multicore` jobs sat **PENDING (Priority)** for days; **`serial`** started within ~1 minute |
+| **Runtime** | ~7–45 min active sync per subject once **RUNNING** (depends on subject size and retries) |
 | **Monitor** | `squeue -u $USER`; `sacct -j JOBID -X`; `tail slurm-m1-subj-JOBID.out`; `du -sh ~/scratch/.../data/raw/nsd/betas/subjNN` |
 | **Transient failures** | `AWS_IO_SOCKET_TIMEOUT` near end of sync → job **FAILED** with partial scratch; **re-sbatch same SUBJ** (sync resumes). Script retries up to 3 passes with adaptive AWS retries. |
 | **Queue diagnosis** | `scontrol show job JOBID` → `Reason=` and `StartTime=` (estimated). `Reason=Priority` on `multicore` ≠ script failure |
