@@ -4,7 +4,6 @@
 from __future__ import annotations
 
 import argparse
-import hashlib
 import sys
 from pathlib import Path
 
@@ -13,23 +12,18 @@ if str(_REPO) not in sys.path:
     sys.path.insert(0, str(_REPO))
 
 from mirage_ablation.config.paths import manifests_dir, raw_nsd_dir, raw_nsd_imagery_dir
+from mirage_ablation.provenance import ManifestHashError, verify_manifest_hashes
 
 
 def _check_sidecar(json_name: str) -> list[str]:
-    issues: list[str] = []
-    json_path = manifests_dir() / json_name
-    sidecar = manifests_dir() / f"{json_name}.sha256"
-    if not json_path.is_file():
-        issues.append(f"missing {json_path}")
-        return issues
-    if not sidecar.is_file():
-        issues.append(f"missing hash sidecar for {json_name} (run s0_verify_manifests.py --write-hashes)")
-        return issues
-    expected = sidecar.read_text().split()[0]
-    actual = hashlib.sha256(json_path.read_bytes()).hexdigest()
-    if expected != actual:
-        issues.append(f"hash mismatch for {json_name}")
-    return issues
+    try:
+        verify_manifest_hashes(
+            check_registry=False,
+            manifest_names=(json_name,),
+        )
+    except ManifestHashError as exc:
+        return [str(exc)]
+    return []
 
 
 def main() -> int:

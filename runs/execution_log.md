@@ -199,3 +199,17 @@ CSF scratch: `betas/subj01`–`subj08` present (~42–62G each). Local file coun
 Aligned `AGENTS.md` (living-doc rule), `data-and-compute-prerequisites.md`, `csf-environment.md`, and workflow execution log header with `runs/registry.yaml`: v2 betas on scratch; production **v3**; v3 re-sync = **T-004b** inside implementation plan (not a pre-requisite to start IP-1).
 
 ---
+
+## 2026-10-28 — IP-1 Foundation implementation (Track B ingest scaffold)
+
+**Executor:** `execute-implementation-plan` milestone IP-1.  
+**Log:** `implementation_plans/2026-10-27-perception-imagery-latent-ablation-s1-s4-ingest-execution-log.md`
+
+**Laptop completed:** `requirements-track-b*.txt`, `pytest.ini`, `tests/conftest.py`, `mirage_ablation/config/{paths,subjects}.py`, `mirage_ablation/provenance.py`, ingest probe CLI, CSF jobscripts (`create_track_b_env`, `pytest_track_b`, `s1_probe`, `sync_m1_behav`, T-004b parametrized perception sync).  
+**Tests:** `python3 -m pytest tests/unit -q` → 8 passed, 1 skipped (2026-10-28).
+
+**CSF blocked:** BatchMode SSH denied (Duo). Pending: env sbatch, `sync_m1_behav.sh`, `pytest_track_b.sbatch`, `s1_probe.sbatch`, optional v3 subj01 sync. After login: `git pull` on `~/comp30030-mirage-ablation` then submit from `~/scratch/comp30030-mirage-ablation`.
+
+**Registry:** `environment_pins.track_b_python` = 3.11.5; `v3_resync_status` = scripts_ready_awaiting_csf_submit.
+
+---

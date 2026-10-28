@@ -1,0 +1,15 @@
+# Track B GPU extras — install after requirements-track-b.txt
+# PyTorch 2.1.0 + CUDA 11.8 wheels (see pytorch.org previous versions)
+--extra-index-url https://download.pytorch.org/whl/cu118
+torch==2.1.0
+torchvision==0.16.0
+transformers==4.37.2
+accelerate==0.24.1
+safetensors
+einops>=0.7.0
+kornia==0.7.1
+omegaconf==2.3.0
+ftfy
+regex
+pytorch-gradual-warmup-lr @ git+https://github.com/ildoonet/pytorch-gradual-warmup-lr.git
+pytorch-tools @ git+https://github.com/pidgy/pytorch-tools.git

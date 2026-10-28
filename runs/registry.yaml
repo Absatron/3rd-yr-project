@@ -98,7 +98,8 @@ data_access:
     s3_file_count_parity: "8/8 subjects; subj03 re-synced with --delete (dryrun 0 deltas)"
     beta_version_on_scratch: betas_fithrf
     beta_version_production_d1: betas_fithrf_GLMdenoise_RR
-    v3_resync_status: pending_T-004b
+    v3_resync_status: scripts_ready_awaiting_csf_submit
+    v3_resync_scripts_at: "2026-10-28"
     partition_policy: serial
     current_subject: null
     slurm_job_id: null
@@ -167,7 +168,9 @@ human_gates:
 
 environment_pins:
   track_a_python: null
-  track_b_python: null
+  track_b_python: "3.11.5"
+  track_b_lock: configs/environments/track_b.lock
+  track_b_env_path: "~/scratch/comp30030-mirage-ablation/envs/track_b"
   pytorch_cuda: null
   glmsingle_version: null
   clip_checkpoints: []

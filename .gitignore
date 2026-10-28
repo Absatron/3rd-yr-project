@@ -19,6 +19,7 @@ exports/
 __pycache__/
 *.py[cod]
 .venv/
+.venv-track-b/
 venv/
 .envrc
 
