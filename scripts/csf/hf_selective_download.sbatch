@@ -7,8 +7,9 @@
 #SBATCH -J mirage_hf_sel
 
 set -euo pipefail
-module load miniforge
 export PATH="${HOME}/.local/bin:${PATH}"
+# shellcheck disable=SC1091
+source "${HOME}/comp30030-mirage-ablation/scripts/csf/csf_conda_bootstrap.sh"
 REPO="${HOME}/comp30030-mirage-ablation"
 SCRATCH="${HOME}/scratch/comp30030-mirage-ablation"
 export MIRAGE_ABLATION_DATA_ROOT="${SCRATCH}/data"

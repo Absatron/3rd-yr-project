@@ -10,8 +10,9 @@
 #SBATCH -J track_b_env
 
 set -euo pipefail
-module load miniforge
 export PATH="${HOME}/.local/bin:${PATH}"
+# shellcheck disable=SC1091
+source "${HOME}/comp30030-mirage-ablation/scripts/csf/csf_conda_bootstrap.sh"
 SCRATCH="${SCRATCH_ROOT:-${HOME}/scratch/comp30030-mirage-ablation}"
 REPO="${HOME}/comp30030-mirage-ablation"
 ENV="${SCRATCH}/envs/track_b"

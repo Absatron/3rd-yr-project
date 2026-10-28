@@ -6,20 +6,33 @@ Related: [ssh-access.md](./ssh-access.md) · [AGENTS.md](../../AGENTS.md) · scr
 
 ## Every interactive / agent SSH session on CSF
 
+As of **2026-10-26**, CSF removed general access to the shared `miniforge` module (see `/opt/apps/etc/modulefiles/interpreters/miniforge/README`). Use a **user install** at `~/miniforge3` (one-time):
+
 ```bash
-module load miniforge
+curl -fsSL -o /tmp/Miniforge3-Linux-x86_64.sh \
+  https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-x86_64.sh
+bash /tmp/Miniforge3-Linux-x86_64.sh -b -p "${HOME}/miniforge3"
+source "${HOME}/miniforge3/etc/profile.d/conda.sh"
+```
+
+Slurm jobs and agents source `scripts/csf/csf_conda_bootstrap.sh` (tries `~/miniforge3`, then legacy `module load miniforge`).
+
+```bash
+source ~/comp30030-mirage-ablation/scripts/csf/csf_conda_bootstrap.sh
 export PATH="$HOME/.local/bin:$PATH"
 cd ~/comp30030-mirage-ablation
 ```
 
-Default login `python` is **3.9** until `miniforge` is loaded → **3.12.8**.
+Track B jobs use conda env `~/scratch/comp30030-mirage-ablation/envs/track_b` (Python **3.11**, not the base miniforge Python).
 
 Optional — append to `~/.bashrc` on CSF (once):
 
 ```bash
-module load miniforge
+source ~/comp30030-mirage-ablation/scripts/csf/csf_conda_bootstrap.sh
 export PATH="$HOME/.local/bin:$PATH"
 ```
+
+**Legacy (pre-2026-10-26):** `module load miniforge` → Python 3.12.8 — no longer available on login or serial nodes.
 
 ## Mac SSH (common mistake)
 
@@ -32,13 +45,13 @@ export PATH="$HOME/.local/bin:$PATH"
 
 ## Hugging Face Hub
 
-- **Do not** use `curl hf.co/cli/install.sh` before `module load miniforge` (needs Python 3.10+).
+- **Do not** use `curl hf.co/cli/install.sh` before conda is available (needs Python 3.10+). Use `csf_conda_bootstrap.sh` or `~/miniforge3`.
 - **Pin** `huggingface_hub` **&lt; 1.0**. Version **2.x** breaks downloads (`TypeError: process() takes no keyword arguments` with `httpx2`).
 
 ```bash
-module load miniforge
-python -m pip install --user "huggingface_hub>=0.26,<1.0"
+source ~/comp30030-mirage-ablation/scripts/csf/csf_conda_bootstrap.sh
 export PATH="$HOME/.local/bin:$PATH"
+python -m pip install --user "huggingface_hub>=0.26,<1.0"
 hf auth whoami    # expect: Absatron (token stored under ~/.cache/huggingface/ on CSF home)
 ```
 
@@ -104,7 +117,7 @@ du -sh ~/scratch/comp30030-mirage-ablation
 Prerequisite: `ssh -O check csf3` → `Master running`.
 
 ```bash
-ssh csf3 'module load miniforge; export PATH=$HOME/.local/bin:$PATH; cd ~/comp30030-mirage-ablation && git pull && aws s3 ls s3://natural-scenes-dataset/ --no-sign-request | head -3'
+ssh csf3 'source ~/comp30030-mirage-ablation/scripts/csf/csf_conda_bootstrap.sh; export PATH=$HOME/.local/bin:$PATH; cd ~/comp30030-mirage-ablation && git pull && aws s3 ls s3://natural-scenes-dataset/ --no-sign-request | head -3'
 ```
 
 ## Slurm
