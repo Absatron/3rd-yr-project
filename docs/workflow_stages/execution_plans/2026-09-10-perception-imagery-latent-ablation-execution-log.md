@@ -4,7 +4,7 @@
 **Slug:** `perception-imagery-latent-ablation`  
 **Model design:** Option 3 (dual-track hybrid)  
 **Started:** 2026-09-10  
-**Overall status:** **IN PROGRESS** — HG-0 signed; M0 complete; M1 v2 perception betas on scratch (all 8 subjects); **D1:** v3 re-sync via implementation **T-004b**; S1–S4 implementation plan approved pending execute (**IP-1**)  
+**Overall status:** **IN PROGRESS** — HG-0 signed; M0 complete; M1 v2 perception betas on scratch (all 8 subjects); **IP-1** CSF jobs submitted 2026-10-28 (`track_b_env` 23913250 → pytest/probe); **D1:** v3 subj01 smoke job 23913251  
 **Verdict:** N/A (no training yet)
 
 ---
@@ -43,7 +43,7 @@ Kickoff (2026-09-10) created docs and registry. **2026-10-03–05:** CSF home/sc
 | ~~B9~~ | ~~Slurm smoke not recorded~~ | — | **Resolved 2026-10-21** — job `23495544` |
 | ~~B10~~ | ~~M0 scratch sync in progress~~ | — | **Resolved 2026-10-21** — log `2026-10-21T16:15:38+01:00`; ~12G `data/raw` |
 | **B11** | CLIP semantic audit `pending_weights` | S0.2 incomplete | HF selective job delivered captions only; no `*clip*` paths on `reesekneeland/MIRAGE` dataset — need CLIP source per plan |
-| **B12** | S1–S4 ingest CLIs not implemented | M1 ingest code blocked | **Plan ready 2026-10-27:** `implementation_plans/2026-10-27-perception-imagery-latent-ablation-s1-s4-ingest-implementation-plan.md` — approve D1–D8, then route `execute-implementation-plan` |
+| **B12** | S1–S4 ingest CLIs not implemented | M1 ingest code blocked | **IP-1 executing** — laptop scaffold + CSF env/probe jobs (`f995320`); await `format_probe.json` PASS before IP-2 |
 
 ---
 

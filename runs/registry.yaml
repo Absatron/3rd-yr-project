@@ -8,7 +8,28 @@ study:
   execution_plan: docs/workflow_stages/execution_plans/2026-09-10-perception-imagery-latent-ablation-execution-plan.md
   plan_approved_at: "2026-09-10"
   s1_s4_implementation_plan: implementation_plans/2026-10-27-perception-imagery-latent-ablation-s1-s4-ingest-implementation-plan.md
-  s1_s4_implementation_plan_status: executing_ip1
+  s1_s4_implementation_plan_status: executing_ip1_csf_jobs_submitted
+  ip1_git_commit: "f995320"
+  ip1_csf_blockers:
+    - "Await sacct COMPLETED: track_b_env 23913250 → pytest 23913397 → s1_probe 23913398; copy track_b.lock if freeze differs"
+  ip1_csf_jobs:
+    track_b_env:
+      job_id: 23913250
+      submitted_at: "2026-10-28"
+      replaces_failed: 23912772
+    pytest_track_b:
+      job_id: 23913397
+      dependency: "afterok:23913250"
+      submitted_at: "2026-10-28"
+    s1_probe:
+      job_id: 23913398
+      dependency: "afterok:23913250"
+      beta_version: betas_fithrf
+      submitted_at: "2026-10-28"
+    v3_resync_smoke_subj01:
+      job_id: 23913251
+      beta_version: betas_fithrf_GLMdenoise_RR
+      submitted_at: "2026-10-28"
   implementation_decisions:
     recorded_at: "2026-10-27"
     D1_beta_version: betas_fithrf_GLMdenoise_RR
@@ -40,7 +61,7 @@ csf:
   slurm_smoke_job_id: 23495544
   slurm_smoke_completed_at: "2026-10-21"
   max_gpus_concurrent: 4
-  miniforge_module: miniforge/24.11.2
+  miniforge_module: "~/miniforge3 (user install; CSF shared miniforge withdrawn 2026-10-26)"
   aws_cli_verified_at: "2026-10-05"
   huggingface_cli_verified_at: "2026-10-05"
   huggingface_hub_pin: ">=0.26,<1.0"
@@ -98,7 +119,7 @@ data_access:
     s3_file_count_parity: "8/8 subjects; subj03 re-synced with --delete (dryrun 0 deltas)"
     beta_version_on_scratch: betas_fithrf
     beta_version_production_d1: betas_fithrf_GLMdenoise_RR
-    v3_resync_status: scripts_ready_awaiting_csf_submit
+    v3_resync_status: subj01_smoke_job_23913251
     v3_resync_scripts_at: "2026-10-28"
     partition_policy: serial
     current_subject: null

@@ -194,9 +194,17 @@ CSF scratch: `betas/subj01`–`subj08` present (~42–62G each). Local file coun
 
 ---
 
-## 2026-10-28 — Living doc reconciliation (D1, M1, B12)
+## 2026-10-28 — IP-1 laptop complete; CSF handoff to execute-implementation-plan
 
-Aligned `AGENTS.md` (living-doc rule), `data-and-compute-prerequisites.md`, `csf-environment.md`, and workflow execution log header with `runs/registry.yaml`: v2 betas on scratch; production **v3**; v3 re-sync = **T-004b** inside implementation plan (not a pre-requisite to start IP-1).
+**Commit:** `85764f7` ([execute-implementation-plan](6173327d-0719-4732-976f-47bf3ec52882)) — T-002/T-003 PASS on laptop; T-001/T-004/T-005/T-050 code ready.
+
+**Orchestration:** Parent agent must **not** run CSF sbatch/sync on behalf of IP-1; route **`execute-implementation-plan`** for CSF verification only.
+
+**CSF notes (2026-10-28):** BatchMode SSH available. `create_track_b_env.sbatch` job **`23912772`** FAILED (`module load miniforge` missing on node). Behav sync may have been started separately — executor to verify eight `responses.tsv` and fix env bootstrap per `docs/CSF/csf-environment.md` before pytest + `s1_probe`.
+
+**CSF resume (2026-10-28 PM):** Commit **`f995320`** — `csf_conda_bootstrap.sh` + user **`~/miniforge3`**. T-004 **PASS** (8× `responses.tsv` on scratch). Slurm: env **`23913250`**, pytest **`23913397`** (`afterok:23913250`), probe **`23913398`** (`BETA_VERSION=betas_fithrf`), optional v3 smoke subj01 **`23913251`**. Monitor: `sacct -j 23913250,23913397,23913398,23913251 -X --format=JobID,State,ExitCode,Elapsed`.
+
+**Exit IP-1 before IP-2:** CSF env + `format_probe.json` all T-005 criteria PASS.
 
 ---
 
