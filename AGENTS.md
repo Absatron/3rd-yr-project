@@ -24,6 +24,27 @@ When **any** of the following change — investigator decision (D1–D8), milest
 
 **Do not** edit frozen upstream science (`hypothesis_formulation/`, `experimental_strategies/`, approved execution plan prose) to record operational choices — use registry + execution logs + implementation execution log instead.
 
+## MIRAGE fidelity (all agents — read before changing code or data)
+
+**Success criterion:** Track A **S12 gate** (MIRAGE notebooks, Setting A, `combined`) is the authoritative check that shared setup matches Kneeland et al. That gate comes **after** S1–S4, weights, and training — so **parity must be enforced during implementation**, not only at the end.
+
+**Authority order for “what MIRAGE did”:**
+
+1. Pinned **`MedARC-AI/MIRAGE`** at `registry.provenance.mirage_fork_commit` (once set) — especially `src/utils.py`, `Train.ipynb`, embedders  
+2. **`docs/workflow_stages/model_designs/2026-09-06-perception-imagery-latent-ablation-option-3.md`** (dual-track contract)  
+3. **`implementation_plans/2026-10-27-…-s1-s4-ingest-implementation-plan.md`** §3 research table (R1–R19) and **`runs/registry.yaml` → `implementation_decisions`**
+
+**Rules:**
+
+- **Track B (S1–S4):** Match MIRAGE numerics and trial logic where the plan cites R3/R4/R5 (betas v3, mask, ÷300, z-score rules, `load_nsd`-compatible matrices). **Physical paths** may differ (HDF5 per D3) if the **logical contract** and parity tests hold.  
+- **Track A:** Notebook logic unchanged; only paths, env pins, manifest logging.  
+- **Any deviation** from MIRAGE or from an recorded decision (D1–D8): **stop**, log in `implementation_plans/…-execution-log.md` and `runs/execution_log.md`, and either **justify** (investigator approval) or **reconcile** (update registry + living docs). Do not silently “improve” splits, beta version, normalisation, or embedder behaviour.  
+- **Setting B** and ablation conditions are **intentional** divergences for hypothesis testing — never substitute them for Setting A gate inputs.
+
+## Who should read what
+
+**This file (`AGENTS.md`):** In Cursor, it is injected as a **workspace rule** for agents working in this repo (alongside `.cursor/rules/csf-remote-execution.mdc`). Subagents do not automatically load it unless the parent prompt or project rules include it — **parent turns must point executors at `AGENTS.md` + registry before CSF or ingest work.** Specialist skills (`execute-implementation-plan`, `execute-experiment`, etc.) list their own primary docs but still obey CSF and gating sections here when working on this project.
+
 | Agent / skill | Primary docs |
 |---------------|--------------|
 | **execute-experiment** | Execution plan, execution log, `docs/execution/data-and-compute-prerequisites.md` |
