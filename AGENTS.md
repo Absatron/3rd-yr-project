@@ -90,14 +90,32 @@ Heavy work runs on **CSF3 Slurm**, not the laptop. **`docs/CSF/ssh-access.md`** 
 
 See execution log **Active blockers** before starting GPU stages.
 
-## Long jobs — submit and hand off (token-efficient)
+## Orchestration vs execution
 
-Do **not** keep an agent turn open while waiting on multi-hour work.
+The **chat agent orchestrates** (route specialists, update living docs, interpret failures). **`execute-implementation-plan`** and **`execute-experiment`** run CSF commands, code, and Slurm — the parent must **not** substitute for them on IP/experiment tasks. Parent prompts to those subagents must include: read **`AGENTS.md`** + **`runs/registry.yaml`**, and the **CSF job verification** rules below.
+
+## CSF job verification (short jobs — do not submit-and-vanish)
+
+**Problem:** Submitting `track_b_env`, pytest, or probe jobs and ending the turn immediately forces the investigator to discover `FAILED` in Slurm UI.
+
+**Rule for `execute-implementation-plan` / `execute-experiment` on CSF:**
+
+| Job class | Examples | Agent must |
+|-----------|----------|------------|
+| **Short** (typical ≤15 min on `serial`) | `create_track_b_env.sbatch`, `pytest_track_b.sbatch`, `s1_probe.sbatch`, behav sync | After `sbatch`, **poll** until `COMPLETED` or `FAILED` (e.g. `sacct` every 30–60s, use **Await** / repeated shell — budget **up to ~20 min** per job in one turn). On **FAILED**: `tail` the `#SBATCH -o` log, **fix repo if clear**, `git push`, CSF `git pull`, **resubmit** (same turn, up to **2 fix cycles** per job type). Only then hand off or chain the next sbatch. |
+| **Long** (multi-hour) | M1 beta sync per subject, S1 production ingest, GPU training | Submit, log `job_id` + monitor command, **end turn** (no polling). |
+
+On **COMPLETED** short jobs, run the **next dependent sbatch in the same turn** when IP-1 sequencing expects it (env → pytest → probe), unless blocked on investigator approval.
+
+Log every job ID and outcome in `runs/execution_log.md` and the implementation execution log.
+
+## Long jobs — hand off only when long
+
+Do **not** keep an agent turn open for **multi-hour** work.
 
 | Work | Agent pattern |
 |------|----------------|
-| `sbatch` (ridge, GPU, sync) | Submit, log `job_id` + `sacct` check command in execution log, **end turn** |
-| Large `aws s3 sync` | Prefer `scripts/csf/*.sbatch`; avoid foreground sync in chat |
-| HF bulk download | Batch job or bounded smoke; do not poll until complete |
+| Per-subject `aws s3 sync`, ridge, diffusion | Submit, log `job_id` + `sacct` command, **end turn** |
+| Large HF bulk download | Batch job; do not poll until complete |
 
-Investigator or a **new** turn checks `squeue` / `sacct` / scratch `du` when jobs finish. Cluster jobs run without an open SSH session.
+Investigator or a **new** turn checks `squeue` / `sacct` when long jobs finish.
