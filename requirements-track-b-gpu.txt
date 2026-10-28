@@ -11,5 +11,6 @@ kornia==0.7.1
 omegaconf==2.3.0
 ftfy
 regex
-pytorch-gradual-warmup-lr @ git+https://github.com/ildoonet/pytorch-gradual-warmup-lr.git
-pytorch-tools @ git+https://github.com/pidgy/pytorch-tools.git
+# MIRAGE setup.sh uses plain git+ installs (package metadata names differ)
+git+https://github.com/ildoonet/pytorch-gradual-warmup-lr.git
+git+https://github.com/pabloppp/pytorch-tools
