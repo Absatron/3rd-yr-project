@@ -30,8 +30,8 @@ conda activate "${ENV}"
 
 python --version
 pip install --upgrade pip
+pip install "numpy>=1.23.2,<2"
 pip install -r "${REPO}/requirements-track-b.txt"
-pip install --force-reinstall "pyarrow>=14.0.0,<18.0.0"
 # IP-1 (S1–S4 ingest/probe): CPU stack only. GPU deps for S3 (IP-4): sbatch --export=INSTALL_GPU=1 ...
 if [[ "${INSTALL_GPU:-0}" == "1" ]]; then
   pip install -r "${REPO}/requirements-track-b-gpu.txt"
@@ -40,6 +40,7 @@ fi
 pip freeze > "${SCRATCH}/runs/env/track_b.freeze.txt"
 cp "${SCRATCH}/runs/env/track_b.freeze.txt" "${REPO}/configs/environments/track_b.lock"
 
+python -c "import numpy; assert numpy.__version__.startswith('1.'), numpy.__version__"
 python -c "import h5py, scipy.io, nibabel, pandas, pyarrow, pydantic, openpyxl; print('import_probe_ok')"
 python --version
 
