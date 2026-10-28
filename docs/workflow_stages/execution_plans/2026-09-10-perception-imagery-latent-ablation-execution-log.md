@@ -4,7 +4,7 @@
 **Slug:** `perception-imagery-latent-ablation`  
 **Model design:** Option 3 (dual-track hybrid)  
 **Started:** 2026-09-10  
-**Overall status:** **IN PROGRESS** — HG-0 signed; M0 complete; M1 v2 perception betas on scratch (all 8 subjects); **IP-1** CSF jobs submitted 2026-10-28 (`track_b_env` 23913250 → pytest/probe); **D1:** v3 subj01 smoke job 23913251  
+**Overall status:** **IN PROGRESS** — HG-0 signed; M0 complete; M1 v2 perception betas on scratch (all 8 subjects); **IP-1** env retry **`23914135`** (`9295b81` after **23914089** FAILED force-reinstall/numpy 2.x); pytest/probe pending; **D1:** v3 subj01 smoke job 23913251  
 **Verdict:** N/A (no training yet)
 
 ---

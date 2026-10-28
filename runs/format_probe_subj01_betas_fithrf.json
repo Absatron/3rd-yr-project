@@ -1,0 +1,183 @@
+{
+  "subject": 1,
+  "beta_version": "betas_fithrf",
+  "perception_session_h5": {
+    "path": "/mnt/iusers01/fse-ugpgt01/compsci01/z29707aj/scratch/comp30030-mirage-ablation/data/raw/nsd/betas/subj01/func1pt8mm/betas_fithrf/betas_session01.hdf5",
+    "datasets": {
+      "betas": {
+        "shape": [
+          750,
+          83,
+          104,
+          81
+        ],
+        "dtype": "int16",
+        "chunks": [
+          750,
+          1,
+          1,
+          1
+        ]
+      }
+    }
+  },
+  "imagery_h5": {
+    "path": "/mnt/iusers01/fse-ugpgt01/compsci01/z29707aj/scratch/comp30030-mirage-ablation/data/raw/nsd_imagery/betas/subj01/func1pt8mm/nsdimagerybetas_fithrf/betas_nsdimagery.hdf5",
+    "datasets": {
+      "betas": {
+        "shape": [
+          720,
+          83,
+          104,
+          81
+        ],
+        "dtype": "int16",
+        "chunks": [
+          720,
+          1,
+          1,
+          1
+        ]
+      }
+    }
+  },
+  "perception_session_nii": {
+    "path": "/mnt/iusers01/fse-ugpgt01/compsci01/z29707aj/scratch/comp30030-mirage-ablation/data/raw/nsd/betas/subj01/func1pt8mm/betas_fithrf/betas_session01.nii.gz",
+    "shape": [
+      81,
+      104,
+      83,
+      750
+    ],
+    "dtype": "int16",
+    "unique_values_sample": null,
+    "unique_count": null,
+    "note": "4D betas volume; uniques omitted (R13 \u2014 no full load)"
+  },
+  "nsdgeneral": {
+    "path": "/mnt/iusers01/fse-ugpgt01/compsci01/z29707aj/scratch/comp30030-mirage-ablation/data/raw/nsd/ppdata/subj01/func1pt8mm/roi/nsdgeneral.nii.gz",
+    "shape": [
+      81,
+      104,
+      83
+    ],
+    "dtype": "float64",
+    "unique_values_sample": [
+      -1.0,
+      0.0,
+      1.0
+    ],
+    "unique_count": 3
+  },
+  "nsdgeneral_unique_values": [
+    -1.0,
+    0.0,
+    1.0
+  ],
+  "axis_probe": {
+    "spatial_shape": [
+      81,
+      104,
+      83
+    ],
+    "h5_shape": [
+      750,
+      83,
+      104,
+      81
+    ],
+    "voxel_order": [
+      2,
+      1,
+      0
+    ],
+    "match_trials": 10
+  },
+  "mat_files": [
+    {
+      "path": "/mnt/iusers01/fse-ugpgt01/compsci01/z29707aj/scratch/comp30030-mirage-ablation/data/raw/nsd/experiments/nsd/nsd_expdesign.mat",
+      "reader": "scipy",
+      "keys": [
+        "basiccnt",
+        "masterordering",
+        "sharedix",
+        "stimpattern",
+        "subjectim"
+      ]
+    },
+    {
+      "path": "/mnt/iusers01/fse-ugpgt01/compsci01/z29707aj/scratch/comp30030-mirage-ablation/data/raw/nsd_imagery/experiments/nsdimagery/designmatrixGLMsingle.mat",
+      "reader": "scipy",
+      "keys": [
+        "stimulus"
+      ]
+    },
+    {
+      "path": "/mnt/iusers01/fse-ugpgt01/compsci01/z29707aj/scratch/comp30030-mirage-ablation/data/raw/nsd_imagery/experiments/nsdimagery/A_pair_list.mat",
+      "reader": "scipy",
+      "keys": [
+        "pair_list"
+      ]
+    },
+    {
+      "path": "/mnt/iusers01/fse-ugpgt01/compsci01/z29707aj/scratch/comp30030-mirage-ablation/data/raw/nsd_imagery/experiments/nsdimagery/B_pair_list.mat",
+      "reader": "scipy",
+      "keys": [
+        "pair_list"
+      ]
+    },
+    {
+      "path": "/mnt/iusers01/fse-ugpgt01/compsci01/z29707aj/scratch/comp30030-mirage-ablation/data/raw/nsd_imagery/experiments/nsdimagery/C_pair_list.mat",
+      "reader": "scipy",
+      "keys": [
+        "pair_list"
+      ]
+    },
+    {
+      "path": "/mnt/iusers01/fse-ugpgt01/compsci01/z29707aj/scratch/comp30030-mirage-ablation/data/raw/nsd_imagery/experiments/nsdimagery/visA_dm.mat",
+      "reader": "scipy",
+      "keys": [
+        "condit_list",
+        "dm"
+      ]
+    },
+    {
+      "path": "/mnt/iusers01/fse-ugpgt01/compsci01/z29707aj/scratch/comp30030-mirage-ablation/data/raw/nsd_imagery/experiments/nsdimagery/visB_dm.mat",
+      "reader": "scipy",
+      "keys": [
+        "condit_list",
+        "dm"
+      ]
+    },
+    {
+      "path": "/mnt/iusers01/fse-ugpgt01/compsci01/z29707aj/scratch/comp30030-mirage-ablation/data/raw/nsd_imagery/experiments/nsdimagery/visC_dm.mat",
+      "reader": "scipy",
+      "keys": [
+        "condit_list",
+        "dm"
+      ]
+    },
+    {
+      "path": "/mnt/iusers01/fse-ugpgt01/compsci01/z29707aj/scratch/comp30030-mirage-ablation/data/raw/nsd_imagery/experiments/nsdimagery/imgA_1_dm.mat",
+      "reader": "scipy",
+      "keys": [
+        "condit_list",
+        "dm"
+      ]
+    },
+    {
+      "path": "/mnt/iusers01/fse-ugpgt01/compsci01/z29707aj/scratch/comp30030-mirage-ablation/data/raw/nsd_imagery/experiments/nsdimagery/attA_dm.mat",
+      "reader": "scipy",
+      "keys": [
+        "condit_list",
+        "dm"
+      ]
+    }
+  ],
+  "responses_tsv_rows": 30000,
+  "imagery_beta_trials": 720,
+  "design_matrix_trials": 720,
+  "imagery_trial_count_match": true,
+  "validation_failures": [],
+  "validation_pass": true
+}

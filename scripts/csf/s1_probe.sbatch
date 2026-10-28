@@ -3,8 +3,8 @@
 # sbatch --export=ALL,BETA_VERSION=betas_fithrf scripts/csf/s1_probe.sbatch
 # v3 production: BETA_VERSION=betas_fithrf_GLMdenoise_RR after T-004b
 
-#SBATCH -p serial
-#SBATCH --ntasks=1
+#SBATCH -p multicore_small
+#SBATCH -n 4
 #SBATCH -t 2:00:00
 #SBATCH -o runs/slurm-logs/s1-probe-%j.out
 #SBATCH -J mirage_s1_probe

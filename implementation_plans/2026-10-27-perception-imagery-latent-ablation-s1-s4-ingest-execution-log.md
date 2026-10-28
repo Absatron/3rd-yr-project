@@ -86,7 +86,7 @@
 
 | Milestone | Status | Date | Notes |
 |---|---|---|---|
-| IP-1 Foundation | **IN PROGRESS** | 2026-10-28 | CSF jobs submitted; await env/pytest/probe completion |
+| IP-1 Foundation | **COMPLETE (CSF)** | 2026-10-28 | Env **23914135**; pytest **23914147**; probe **23915227** PASS |
 
 ---
 
@@ -113,6 +113,72 @@
 
 ---
 
+## Amendment 2026-10-28 (env retry — job 23913250 FAILED)
+
+**Git:** CSF home pulled **`af29202`** (CPU-only IP-1 env install; GPU stack gated by `INSTALL_GPU=1`).
+
+**Root cause (23913250):** `pip install -r requirements-track-b-gpu.txt` used wrong git repo for `pytorch-tools` (`pidgy/…` vs MIRAGE `pabloppp/…`).
+
+**Slurm actions (execute-implementation-plan CSF handoff):**
+
+| Job ID | Script | State / notes |
+|--------|--------|----------------|
+| 23913250 | `create_track_b_env.sbatch` | **FAILED** 1:0 (~5:32) |
+| 23913397 | `pytest_track_b.sbatch` | **CANCELLED** (orphaned `afterok:23913250`) |
+| 23913398 | `s1_probe.sbatch` | **CANCELLED** (orphaned `afterok:23913250`) |
+| **23914049** | `create_track_b_env.sbatch` | **RUNNING** — no `INSTALL_GPU` |
+| 23913251 | `sync_m1_perception_subj.sbatch` | **RUNNING** — v3 smoke subj01 (note only) |
+
+**Monitor:** `sacct -j 23914049,23913251 -X --format=JobID,JobName,State,ExitCode,Elapsed`
+
+**Pending (after 23914049 COMPLETED):** Resubmit `pytest_track_b.sbatch` and `s1_probe.sbatch` with `BETA_VERSION=betas_fithrf`; **do not** use `afterok` unless chaining fresh job IDs. Log IDs in registry + this log.
+
+**Handoff:** IP-2 **not** started.
+
+---
+
+## Amendment 2026-10-28 (pyarrow pin — job 23914049 FAILED → 23914089)
+
+**Git:** CSF home pulled **`9383632`** (`pyarrow>=14,<18` in `requirements-track-b.txt`; force reinstall in `create_track_b_env.sbatch`).
+
+**Root cause (23914049):** Import probe — `pyarrow` 26 incompatible with pinned `numpy<2` (needs NumPy 2.0). Job **FAILED** 1:0 (~1:20).
+
+**Slurm actions:**
+
+| Job ID | Script | State / notes |
+|--------|--------|----------------|
+| 23914049 | `create_track_b_env.sbatch` | **FAILED** 1:0 — pyarrow/numpy mismatch |
+| **23914089** | `create_track_b_env.sbatch` | **FAILED** 1:0 (~1:30) — force-reinstall → numpy 2.x / h5py |
+
+**Monitor:** `sacct -j 23914089,23913251 -X --format=JobID,JobName,State,ExitCode,Elapsed`
+
+**Pending (after 23914089 COMPLETED):** Resubmit `pytest_track_b.sbatch` and `s1_probe.sbatch` with `BETA_VERSION=betas_fithrf`; no `afterok`. Log IDs in registry + this log.
+
+**Handoff:** IP-2 **not** started.
+
+---
+
+## Amendment 2026-10-28 (force-reinstall — job 23914089 FAILED → 23914135)
+
+**Git:** CSF home pulled **`9295b81`** (`pyarrow==17.0.0`; install `numpy>=1.23.2,<2` before `-r requirements-track-b.txt`; removed force-reinstall from `create_track_b_env.sbatch`).
+
+**Root cause (23914089):** `pip install --force-reinstall pyarrow` after main requirements upgraded **numpy to 2.4.6**; import probe failed on **h5py** (`numpy.dtype size changed`).
+
+**Slurm actions:**
+
+| Job ID | Script | State / notes |
+|--------|--------|----------------|
+| 23914089 | `create_track_b_env.sbatch` | **FAILED** 1:0 (~1:30) — force-reinstall → numpy 2.x / h5py |
+| **23914135** | `create_track_b_env.sbatch` | **RUNNING** at handoff — no `INSTALL_GPU` |
+
+**Monitor:** `sacct -j 23914135,23913251 -X --format=JobID,JobName,State,ExitCode,Elapsed`
+
+**Pending (after 23914135 COMPLETED):** Resubmit `pytest_track_b.sbatch` and `s1_probe.sbatch` with `BETA_VERSION=betas_fithrf`; no `afterok`. Log IDs in registry + this log.
+
+**Handoff:** IP-2 **not** started.
+
+---
+
 ## Deviations Register
 
 | # | Task | What Changed | Reason | Approved By |
@@ -126,8 +192,8 @@
 | # | Issue | Status | Resolution |
 |---|---|---|---|
 | 1 | CSF BatchMode SSH unavailable | Resolved | BatchMode OK 2026-10-28 |
-| 2 | `track_b.lock` CPU-only from laptop venv | Open | Re-copy after job **23913250** COMPLETED |
-| 3 | miniforge module missing on serial | Resolved | `f995320` bootstrap + `~/miniforge3` |
+| 2 | `track_b.lock` CPU-only from laptop venv | Resolved | CSF freeze copied 2026-10-28 (`89b00ee…`) |
+| 3 | Probe/sbatch fixes not on `origin/main` | Open | Commit `probe.py` + `s1_probe.sbatch` + lock; CSF `git pull`; re-enable `git pull` in sbatch |
 
 ---
 
@@ -149,9 +215,41 @@ Monitor: `sacct -j <JOBID> --format=JobID,State,ExitCode,Elapsed,MaxRSS`
 
 ---
 
+**Handoff:** IP-2 **not** started.
+
+---
+
+## Amendment 2026-10-28 (IP-1 CSF verification — execute-implementation-plan)
+
+**CSF git:** `52829fa` (AGENTS.md polling rules only; code at `9295b81` until probe/sbatch commit).
+
+**Jobs (sequential handoff after env COMPLETED):**
+
+| Job ID | Script | State | Notes |
+|--------|--------|-------|-------|
+| 23914135 | `create_track_b_env.sbatch` | **COMPLETED** 0:0 (~1:06) | T-001 CSF env |
+| 23914147 | `pytest_track_b.sbatch` | **COMPLETED** 0:0 (~0:10) | 8 passed, 1 skipped |
+| 23914156 | `s1_probe.sbatch` (serial) | **OUT_OF_MEMORY** 0:125 | `_nifti_info` loaded full 4D NIfTI |
+| 23914541 | `s1_probe.sbatch` (serial) | **OUT_OF_MEMORY** 0:125 | same |
+| 23914911 | `s1_probe.sbatch` (serial) | **OUT_OF_MEMORY** 0:125 | same |
+| 23915059 | `s1_probe.sbatch` (`multicore_small -n 4`) | **FAILED** 1:0 | RAM OK; axis int16 + design count logic |
+| **23915227** | `s1_probe.sbatch` (`multicore_small -n 4`) | **COMPLETED** 0:0 (~4:01) | `format_probe.json` **validation_pass: true** |
+
+**Fixes (laptop, uncommitted — push before next CSF `git pull` in sbatch):**
+
+- `mirage_ablation/ingest/probe.py`: skip 4D NIfTI full load (R13); int16 HDF5/NIfTI axis parity; design trial count = Σ `(dm rows × cols) // 60` over 12 `*_dm.mat` (720 = imagery betas rows).
+- `scripts/csf/s1_probe.sbatch`: `-p multicore_small -n 4` (serial ~5 GB OOM on axis probe).
+
+**Artifacts:** `runs/format_probe_subj01_betas_fithrf.json` (from scratch); `configs/environments/track_b.lock` synced from CSF (`89b00ee…`).
+
+**T-005 criteria:** `voxel_order` [2,1,0]; `nsdgeneral` includes 1; imagery/design trials 720; all `.mat` readers recorded.
+
+**Milestone IP-1:** exit criteria met on CSF; **IP-2 not started**. Recommend `post-implementation-review` after git commit of probe + sbatch + lock.
+
+---
+
 ## Summary
 
-- **Tasks completed:** 3 PASS (T-002, T-003, T-004), 4 PARTIAL (T-001, T-004b, T-005, T-050), 0 FAIL
-- **Milestone IP-1 exit criteria:** NOT fully met (await jobs 23913250 → 23913397/23913398)
-- **Recommendation:** **INCOMPLETE** — verify sacct + probe JSON; commit lock if freeze differs; then `post-implementation-review`
-- **Next:** `post-implementation-review` after IP-1 exit criteria satisfied; do **not** start T-010+ until probe PASS
+- **Tasks completed:** T-002, T-003, T-004 PASS; T-001, T-005, T-050 PASS on CSF; T-004b PARTIAL (smoke job separate)
+- **Milestone IP-1 exit criteria:** **MET** (env, pytest, `format_probe.json` all criteria)
+- **Recommendation:** **COMPLETE (pending git commit/push of probe + s1_probe + lock)** — then `post-implementation-review`; do **not** start T-010+ until investigator commits

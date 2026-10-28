@@ -208,6 +208,52 @@ CSF scratch: `betas/subj01`–`subj08` present (~42–62G each). Local file coun
 
 ---
 
+## 2026-10-28 — IP-1 env job retry (23913250 FAILED → 23914049)
+
+**Git on CSF:** `af29202` — `create_track_b_env.sbatch` installs CPU stack only unless `INSTALL_GPU=1`; GPU deps deferred to IP-4/S3; `requirements-track-b-gpu.txt` uses `pabloppp/pytorch-tools` (MIRAGE-aligned).
+
+**Root cause (23913250):** Env job ran GPU requirements with wrong `pytorch-tools` git URL (`pidgy/…`).
+
+**Actions:** `git pull` on CSF home; `scancel 23913397 23913398` (orphaned `afterok:23913250`); resubmit env **`23914049`** (`sbatch -D ~/scratch/... create_track_b_env.sbatch`, no `INSTALL_GPU`). Pytest + S1 probe **not** resubmitted until **`23914049` COMPLETED** (no `afterok` chain).
+
+**Parallel:** v3 perception smoke subj01 **`23913251`** still **RUNNING** (unchanged).
+
+**Monitor:** `sacct -j 23914049,23913251 -X --format=JobID,JobName,State,ExitCode,Elapsed`
+
+**After 23914049 COMPLETED:** `sbatch -D ~/scratch/comp30030-mirage-ablation ~/comp30030-mirage-ablation/scripts/csf/pytest_track_b.sbatch`; `sbatch -D ~/scratch/comp30030-mirage-ablation --export=ALL,BETA_VERSION=betas_fithrf ~/comp30030-mirage-ablation/scripts/csf/s1_probe.sbatch`; log new job IDs; `git pull` laptop if `track_b.lock` updated on CSF.
+
+---
+
+## 2026-10-28 — IP-1 env retry (23914049 FAILED pyarrow → 23914089)
+
+**Root cause (23914049):** Import probe failed — `pyarrow` 26 requires NumPy 2.0; Track B stack pins `numpy<2`.
+
+**Fix on `main`:** `9383632` — `requirements-track-b.txt` pins `pyarrow>=14.0.0,<18.0.0`; `create_track_b_env.sbatch` adds `pip install --force-reinstall` for pyarrow after main requirements.
+
+**Actions:** CSF `git pull` (`af29202..9383632`); resubmit env **`23914089`** (`sbatch` from `~/scratch/comp30030-mirage-ablation`, no `INSTALL_GPU`). Pytest + S1 probe **pending** until **`23914089` COMPLETED**.
+
+**Monitor:** `sacct -j 23914089,23913251 -X --format=JobID,JobName,State,ExitCode,Elapsed`
+
+**After 23914089 COMPLETED:** `sbatch -D ~/scratch/comp30030-mirage-ablation ~/comp30030-mirage-ablation/scripts/csf/pytest_track_b.sbatch`; `sbatch -D ~/scratch/comp30030-mirage-ablation --export=ALL,BETA_VERSION=betas_fithrf ~/comp30030-mirage-ablation/scripts/csf/s1_probe.sbatch`; log new job IDs; `git pull` laptop if `track_b.lock` updated on CSF.
+
+**Outcome (23914089):** **FAILED** 1:0 (~1:30) — `pip install --force-reinstall pyarrow` pulled **numpy 2.4.6**; import probe **`h5py` ValueError** (dtype binary incompatibility).
+
+---
+
+## 2026-10-28 — IP-1 env retry (23914089 FAILED force-reinstall → 23914135)
+
+**Root cause (23914089):** Separate force-reinstall of pyarrow after main requirements upgraded numpy to 2.x despite Track B `numpy<2` pin.
+
+**Fix on `main`:** **`9295b81`** — `pyarrow==17.0.0` in `requirements-track-b.txt`; `create_track_b_env.sbatch` installs `numpy>=1.23.2,<2` **before** `-r requirements-track-b.txt`; removed force-reinstall line.
+
+**Actions:** CSF `git pull` (`9383632..9295b81`); resubmit env **`23914135`** (`sbatch` from `~/scratch/comp30030-mirage-ablation`, no `INSTALL_GPU`). Pytest + S1 probe **pending** until **`23914135` COMPLETED**.
+
+**Monitor:** `sacct -j 23914135,23913251 -X --format=JobID,JobName,State,ExitCode,Elapsed`
+
+**After 23914135 COMPLETED:** `sbatch -D ~/scratch/comp30030-mirage-ablation ~/comp30030-mirage-ablation/scripts/csf/pytest_track_b.sbatch`; `sbatch -D ~/scratch/comp30030-mirage-ablation --export=ALL,BETA_VERSION=betas_fithrf ~/comp30030-mirage-ablation/scripts/csf/s1_probe.sbatch`; log new job IDs; `git pull` laptop if `track_b.lock` updated on CSF.
+
+---
+
 ## 2026-10-28 — IP-1 Foundation implementation (Track B ingest scaffold)
 
 **Executor:** `execute-implementation-plan` milestone IP-1.  
@@ -219,5 +265,25 @@ CSF scratch: `betas/subj01`–`subj08` present (~42–62G each). Local file coun
 **CSF blocked:** BatchMode SSH denied (Duo). Pending: env sbatch, `sync_m1_behav.sh`, `pytest_track_b.sbatch`, `s1_probe.sbatch`, optional v3 subj01 sync. After login: `git pull` on `~/comp30030-mirage-ablation` then submit from `~/scratch/comp30030-mirage-ablation`.
 
 **Registry:** `environment_pins.track_b_python` = 3.11.5; `v3_resync_status` = scripts_ready_awaiting_csf_submit.
+
+---
+
+## 2026-10-28 — IP-1 CSF verification complete (execute-implementation-plan)
+
+**CSF git pull:** `52829fa` on home clone.
+
+| Job ID | Script | Result |
+|--------|--------|--------|
+| 23914135 | `create_track_b_env.sbatch` | COMPLETED 0:0 (~1:06) |
+| 23914147 | `pytest_track_b.sbatch` | COMPLETED 0:0 — 8 passed, 1 skipped |
+| 23915227 | `s1_probe.sbatch` (`multicore_small`, `BETA_VERSION=betas_fithrf`) | COMPLETED 0:0 (~4:01) — probe PASS |
+
+**Failed retries (logged):** s1_probe **23914156**, **23914541**, **23914911** OOM on `serial`; **23915059** validation fail before probe.py fix.
+
+**Artifacts:** `runs/format_probe_subj01_betas_fithrf.json`; `configs/environments/track_b.lock` synced from CSF.
+
+**Uncommitted laptop changes:** `mirage_ablation/ingest/probe.py`, `scripts/csf/s1_probe.sbatch` (commit + push before CSF sbatch `git pull`).
+
+**IP-2:** not started.
 
 ---

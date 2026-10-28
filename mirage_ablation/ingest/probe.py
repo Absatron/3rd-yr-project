@@ -37,14 +37,26 @@ def _h5_dataset_info(path: Path) -> dict[str, Any]:
     return info
 
 
-def _nifti_info(path: Path) -> dict[str, Any]:
+def _nifti_info(path: Path, *, skip_heavy_uniques: bool = False) -> dict[str, Any]:
+    """Shape/dtype metadata; optional unique-value scan (skip for large 4D betas)."""
     img = nib.load(path)
+    shape = img.shape
+    dtype = str(img.get_data_dtype())
+    if skip_heavy_uniques or (len(shape) == 4 and int(shape[3]) > 32):
+        return {
+            "path": str(path),
+            "shape": shape,
+            "dtype": dtype,
+            "unique_values_sample": None,
+            "unique_count": None,
+            "note": "4D betas volume; uniques omitted (R13 — no full load)",
+        }
     data = np.asanyarray(img.dataobj)
     uniq = np.unique(data[np.isfinite(data)])
     return {
         "path": str(path),
-        "shape": data.shape,
-        "dtype": str(data.dtype),
+        "shape": shape,
+        "dtype": dtype,
         "unique_values_sample": uniq[:20].tolist(),
         "unique_count": int(len(uniq)),
     }
@@ -85,13 +97,24 @@ def _infer_voxel_order(
                 nii_slice = np.asanyarray(
                     img.dataobj[..., t] if img.ndim == 4 else img.dataobj
                 )
-                h5_slice = np.array(betas[t], dtype=np.float32)
-                if np.issubdtype(betas.dtype, np.integer):
-                    h5_slice = h5_slice / 300.0
-                h5_reordered = np.transpose(h5_slice, perm_list)
-                if h5_reordered.shape != nii_slice.shape or not np.array_equal(
-                    h5_reordered, nii_slice, equal_nan=True
+                h5_slice = np.asarray(betas[t])
+                if np.issubdtype(h5_slice.dtype, np.integer) and np.issubdtype(
+                    nii_slice.dtype, np.integer
                 ):
+                    h5_reordered = np.transpose(h5_slice, perm_list)
+                    equal = np.array_equal(h5_reordered, nii_slice, equal_nan=True)
+                else:
+                    h5_cmp = h5_slice.astype(np.float64)
+                    nii_cmp = nii_slice.astype(np.float64)
+                    if np.issubdtype(betas.dtype, np.integer):
+                        h5_cmp = h5_cmp / 300.0
+                    if np.issubdtype(nii_slice.dtype, np.integer):
+                        nii_cmp = nii_cmp / 300.0
+                    h5_reordered = np.transpose(h5_cmp, perm_list)
+                    equal = h5_reordered.shape == nii_cmp.shape and np.allclose(
+                        h5_reordered, nii_cmp, equal_nan=True
+                    )
+                if not equal:
                     ok = False
                     break
             if ok:
@@ -122,25 +145,44 @@ def _read_mat_structure(path: Path) -> dict[str, Any]:
 
 
 def _design_trial_count(design_dir: Path) -> int | None:
-    dm = design_dir / "designmatrixGLMsingle.mat"
-    if not dm.is_file():
-        return None
-    try:
-        data = loadmat(dm, simplify_cells=True)
-    except NotImplementedError:
-        with h5py.File(dm, "r") as f:
-            for key in f.keys():
-                obj = f[key]
-                if hasattr(obj, "shape") and len(obj.shape) >= 2:
-                    return int(obj.shape[1])
-        return None
-    for key, val in data.items():
-        if key.startswith("__"):
+    """Total GLMsingle beta maps implied by per-run design matrices (T-005)."""
+    labels = (
+        "visA_dm",
+        "visB_dm",
+        "visC_dm",
+        "imgA_1_dm",
+        "imgA_2_dm",
+        "imgB_1_dm",
+        "imgB_2_dm",
+        "imgC_1_dm",
+        "imgC_2_dm",
+        "attA_dm",
+        "attB_dm",
+        "attC_dm",
+    )
+    total = 0
+    found = False
+    for label in labels:
+        path = design_dir / f"{label}.mat"
+        if not path.is_file():
             continue
-        arr = np.asarray(val)
-        if arr.ndim >= 2:
-            return int(arr.shape[1])
-    return None
+        try:
+            data = loadmat(path, simplify_cells=True)
+        except NotImplementedError:
+            with h5py.File(path, "r") as f:
+                if "dm" not in f:
+                    continue
+                dm = np.asarray(f["dm"])
+        else:
+            if "dm" not in data:
+                continue
+            dm = np.asarray(data["dm"])
+        if dm.ndim != 2:
+            continue
+        found = True
+        # NSD-Imagery dm rows are TRs; each 60 TRs yield one beta per condition column.
+        total += (dm.shape[0] * dm.shape[1]) // 60
+    return total if found else None
 
 
 def run_format_probe(subject: int, beta_version: str) -> dict[str, Any]:
@@ -159,7 +201,9 @@ def run_format_probe(subject: int, beta_version: str) -> dict[str, Any]:
         "beta_version": beta_version,
         "perception_session_h5": _h5_dataset_info(h5_sess) if h5_sess.is_file() else {"missing": str(h5_sess)},
         "imagery_h5": _h5_dataset_info(h5_img) if h5_img.is_file() else {"missing": str(h5_img)},
-        "perception_session_nii": _nifti_info(nii_sess) if nii_sess.is_file() else {"missing": str(nii_sess)},
+        "perception_session_nii": _nifti_info(nii_sess, skip_heavy_uniques=True)
+        if nii_sess.is_file()
+        else {"missing": str(nii_sess)},
         "nsdgeneral": _nifti_info(roi) if roi.is_file() else {"missing": str(roi)},
         "nsdgeneral_unique_values": _mask_unique_values(roi) if roi.is_file() else [],
     }
